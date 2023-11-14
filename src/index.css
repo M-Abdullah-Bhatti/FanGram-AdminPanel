@@ -1,0 +1,287 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font-family: "Roboto" !important;
+}
+
+:root {
+  --font: "Roboto";
+}
+
+.table {
+  padding: 10px;
+  transform: translate(80px, 90px);
+  /* padding-right: 95px; */
+  width: calc(100% - 95px);
+}
+
+@media (max-width: 700px) {
+  * {
+    font-size: 10px;
+  }
+
+  .table {
+    transform: translate(60px, 80px);
+    /* padding-right: 40px; */
+    width: 100%;
+  }
+}
+
+/* 
+===========================================
+                SIDE BAR 
+===========================================
+*/
+
+.heading {
+  font-family: var(--font);
+  font-size: 2rem;
+}
+
+.links {
+  text-decoration: none;
+  color: #333;
+}
+
+.item {
+  margin-top: 30px;
+}
+
+.logout {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+}
+
+.list-item {
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+}
+
+@media (max-width: 700px) {
+  .logout {
+    top: 70%;
+  }
+}
+
+/* 
+===========================================
+            LOGIN PAGE
+===========================================
+*/
+
+.header {
+  background-color: #fdc564;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: var(--font);
+  font-style: italic;
+  position: relative;
+}
+
+.login-heading {
+  color: black !important;
+  padding: 4.5rem;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.logo-circle {
+  height: 100px;
+  width: 100px;
+  background: url("./Assets/logo.png");
+  background-position: right;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -3rem;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  padding: 8rem;
+  width: 50%;
+}
+
+.login-text {
+  font-family: var(--font);
+  font-size: 2rem;
+  padding: 1.2rem 0;
+}
+
+.field {
+  width: 100%;
+  display: block;
+  padding: 1.2rem 0;
+  font-size: 0.8rem;
+}
+
+.field::placeholder {
+  font-family: var(--font);
+  font-size: 1.1rem;
+}
+
+.field:focus {
+  outline: #fff;
+  border-bottom: 2px #000 solid;
+}
+
+.forgot {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: #890008;
+  text-align: right;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.login-submit {
+  background-color: #890008;
+  color: #fff;
+  font-family: var(--font);
+  padding: 1rem;
+  margin: 2rem auto;
+  display: block;
+  border-radius: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.label {
+  color: #999;
+  margin-right: 10px;
+}
+.refundcontainer .MuiTypography-body1 {
+  padding: 15px 0px;
+}
+.refundcontainer {
+  padding: 25px 30px;
+}
+.refundcontainer1 .MuiTypography-body1 {
+  color: #585757;
+}
+/* A7A7A7 */
+.refundcontainer2 .MuiTypography-body1 {
+  font-weight: 600 !important;
+}
+body {
+  font-family: "Roboto";
+}
+.MuiPaper-elevation1 {
+  box-shadow: none !important;
+}
+@media (max-width: 1300px) {
+  .login-box {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .login-box {
+    width: 70%;
+  }
+}
+
+@media (max-width: 800px) {
+  .login-box {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .login-heading {
+    padding: 4rem 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .login-heading {
+    padding: 9rem 1rem;
+  }
+}
+
+/* 
+=============================================
+              Coupon Details
+=============================================
+*/
+
+.img-container {
+  height: 300px;
+  width: 80%;
+  position: relative;
+}
+
+@media (max-width: 700px) {
+  .img-container {
+    width: 100%;
+    height: 250px;
+  }
+}
+
+.save-button {
+  margin-top: 200px;
+}
+
+.save-button-1 {
+  margin-top: 130px;
+}
+
+@media (max-width: 700px) {
+  .save-button {
+    margin-top: 0;
+  }
+
+  .save-button-1 {
+    margin-top: 0;
+  }
+}
+.addImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #00000033;
+  height: 440px;
+  width: 30%;
+}
+.imagebody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.upload-label {
+  color: #004889;
+  cursor: pointer;
+}

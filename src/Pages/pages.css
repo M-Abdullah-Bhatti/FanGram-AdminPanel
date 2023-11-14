@@ -1,0 +1,4 @@
+.addUniversity__duration .MuiNativeSelect-select,
+.editUniversity__duration .MuiNativeSelect-select {
+  padding-inline: 1rem !important;
+}

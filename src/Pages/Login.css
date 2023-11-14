@@ -1,0 +1,120 @@
+* {
+  box-sizing: border-box;
+  margin: 0%;
+  padding: 0%;
+}
+
+:root {
+  --font: "Poppins";
+}
+
+.header {
+  background-color: #fdc564;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: var(--font);
+  font-style: italic;
+  /* position: relative; */
+  height: 25vh;
+  justify-content: flex-start;
+  width: 90%;
+}
+.sidebar-head {
+  width: 90%;
+  height: 80px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+.main_container {
+  height: 100vh;
+  background-color: #fdc564;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+.login-heading {
+  padding: 4.5rem;
+  font-size: 2.5rem;
+  margin: 0;
+  font-family: var(--font);
+}
+
+.logo-circle {
+  height: 100px;
+  width: 100px;
+  background: url("../Assets/logo.png");
+  background-position: right;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -3rem;
+}
+
+.login_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  width: 50%;
+  box-shadow: 0px 2px 10px 0px #4c4e6438;
+  border-radius: 15px;
+  padding: 15px 0px;
+}
+.dashboard_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 8px;
+  padding-bottom: 15px;
+  border: 1px solid #4c4e6440;
+  margin-bottom: 15px;
+}
+.textfields_div {
+  width: 45vw;
+  margin: 20px 0;
+  /* background-color: #e7e8e5; */
+  padding-inline: 10px;
+  border-radius: 12px;
+  border: none;
+}
+
+.input_fields {
+  width: 100%;
+  border: none !important;
+  background: none !important;
+  border-radius: 10px !important;
+  /* height: 40px; */
+}
+.input_fields::before {
+  background-color: #fff !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* .input_fields .MuiInputBase-input {
+  background-color: #e7e8e5;
+  padding-inline: 10px;
+} */
+
+@media screen and (max-width: 768px) {
+  .login_container {
+    width: 75%;
+  }
+  .textfields_div {
+    width: 70vw;
+  }
+}
