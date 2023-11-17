@@ -1,9 +1,8 @@
 import axios from "axios";
 
-
 export const axiosInstance = axios.create({
-  baseURL: "https://riwa-backend-7a251027bbd5.herokuapp.com/",
-  // baseURL: "http://localhost:5000/",
+  // baseURL: "https://riwa-backend-7a251027bbd5.herokuapp.com/",
+  baseURL: "http://localhost:5000/",
 });
 
 axiosInstance.interceptors.request.use(
@@ -16,7 +15,7 @@ axiosInstance.interceptors.request.use(
   },
   function (err) {
     return Promise.reject(err);
-  },
+  }
 );
 axiosInstance.interceptors.response.use(
   function (config) {
@@ -27,6 +26,5 @@ axiosInstance.interceptors.response.use(
       window.location.href = "/";
       return Promise.reject(err);
     }
-  },
+  }
 );
-

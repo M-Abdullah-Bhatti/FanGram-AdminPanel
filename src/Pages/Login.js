@@ -32,9 +32,6 @@ const LoginScreen = () => {
     });
   };
 
-  // const handleSubmit=(event)=>{
-
-  // }
   const handlePermissions = (arr) => {
     console.log(arr);
     return arr.includes("Admin") || arr.includes("Admins");
@@ -48,21 +45,15 @@ const LoginScreen = () => {
       window.sessionStorage.setItem("info", JSON.stringify("response"));
 
       const response = await axios.post(
-        "https://riwa-backend-7a251027bbd5.herokuapp.com/admin/adminSignIn",
+        "http://localhost:5000/api/user/login",
         data
       );
-      // const response = await axios.post("http://localhost:5000/admin/adminSignIn", data)
-      console.log(response, "response");
+      console.log("response", response);
       window.sessionStorage.setItem("info", JSON.stringify(response?.data));
-      if (
-        handlePermissions(response?.data?.res?.Permission) ||
-        handlePermissions(response?.data?.res?.Permission)
-      )
-        history.push({ pathname: "/dashboard/admins" });
-      else history.push({ pathname: "/dashboard/nfts" });
+
+      history.push({ pathname: "/dashboard/admins" });
     } catch (err) {
       setError(err?.response?.data?.message);
-      // console.log(err);
       setLoader(false);
     } finally {
       setLoader(false);
