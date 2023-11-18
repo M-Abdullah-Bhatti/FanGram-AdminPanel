@@ -29,7 +29,7 @@ export const PostData = async(endpoint, body)=>{
 
    try{
     const {data} = await axiosInstance.post(endpoint, body)
-    return data?.data
+    return data
   }
   catch(error)
   {
