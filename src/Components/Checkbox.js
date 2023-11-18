@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 export default function CheckboxLabels({ Label, check, onClick }) {
     return (
-        <FormGroup sx={{ marginTop: "10px" }}>
+        <FormGroup >
             <FormControlLabel
                 control={
                     <Checkbox

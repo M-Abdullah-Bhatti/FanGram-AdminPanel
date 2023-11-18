@@ -7,11 +7,11 @@ import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import PersonIcon from "@mui/icons-material/Person";
 import Products from "../Pages/Products";
-import Users from "../Pages/Users";
+import Celebrities from "../Pages/Celebrities";
 import AddProduct from "../Pages/AddProduct";
 import EditProduct from "../Pages/EditProduct";
 import EditUser from "../Pages/EditUser";
-import AddUser from "../Pages/AddUser";
+import AddCelebrity from "../Pages/AddCelebrity";
 import PurchaseHistory from "../Pages/PurchaseHistroy";
 import RefundRequests from "../Pages/RefundRequests";
 import SingleRefund from "../Pages/singleRefund";
@@ -23,7 +23,7 @@ import OrderTracking from "../Pages/OrderTracking";
 const Abc = () => <></>;
 
 export const routes = [
-	{ title: "Admins", name: "Admins", icon: <PersonIcon />, component: Users },
+	{ title: "Celebrities", name: "Celebrities", icon: <PersonIcon />, component: Celebrities },
 	{
 		title: "NFTs",
 		name: "NFTs",
@@ -92,7 +92,7 @@ export const Editroutes = [
 ];
 
 export const Addroutes = [
-	{ name: "Add_Admin", icon: <PersonIcon />, component: AddUser },
+	{ name: "Add_Celebrity", icon: <PersonIcon />, component: AddCelebrity },
 	{ name: "Add_Nft", icon: <TokenIcon />, component: AddProduct },
 	// { name: "Add_Offer", icon: <LocalOfferIcon />, component: Abc },
 	{ name: "Add_Sell Request", icon: <StorefrontIcon />, component: Abc },

@@ -24,7 +24,7 @@ import Drag from "../Components/draganddrop";
 import DummyImage from "../Assets/product_img.svg";
 import upload from "../Assets/drag.svg";
 import Successmodal from "../Components/modals/successmodal";
-import { updateProduct } from "../NetworkCalls/Products/ServerReq";
+import { updateProduct } from "../NetworkCalls/ServerReq";
 import { uploadImage } from "../NetworkCalls/firebaseCalls";
 import InputField from "../Components/inputfield";
 import { SelectInput } from "../Components/SelectInput";

@@ -8,14 +8,14 @@ import logo from "../Assets/riwa-admin-logo.svg";
 import InputField from "../Components/inputfield";
 import ButtonComponent from "../Components/buttton";
 import axios from "axios";
+import { LoginUser } from "../NetworkCalls/Admin/ServerReq";
+import { toast } from "react-toastify";
 
 const LoginScreen = () => {
   const history = useHistory();
   const [loader, setLoader] = useState(false);
   const [Error, setError] = useState("");
-  const [data, setData] = useState({
-    Email: "",
-  });
+  const [data, setData] = useState({  });
 
   const auth = getAuth();
 
@@ -42,16 +42,21 @@ const LoginScreen = () => {
     setError("");
     setLoader(true);
     try {
-      window.sessionStorage.setItem("info", JSON.stringify("response"));
+      setLoader(true)
+      const response = await LoginUser(data);
 
-      const response = await axios.post(
-        "http://localhost:5000/api/user/login",
-        data
-      );
-      console.log("response", response);
-      window.sessionStorage.setItem("info", JSON.stringify(response?.data));
-
-      history.push({ pathname: "/dashboard/admins" });
+      if (response?.status) {
+        let user = {
+          userId: response?.userId,
+          token: response?.token,
+        };
+        setLoader(false)
+        toast.success(response?.message);
+        window.sessionStorage.setItem("info", JSON.stringify(user));
+        history.push({ pathname: "/dashboard/celebrities" });
+      } else if (!response?.status) {
+        toast.error(response?.message);
+      }
     } catch (err) {
       setError(err?.response?.data?.message);
       setLoader(false);
@@ -82,8 +87,7 @@ const LoginScreen = () => {
             <div className="textfields_div">
               <InputField
                 type="email"
-                name="Email"
-                value={data.Email}
+                name="email"
                 placeholder={"Email"}
                 onChange={handleChange}
               />
@@ -92,8 +96,7 @@ const LoginScreen = () => {
             <div className="textfields_div">
               <InputField
                 type="password"
-                name="Password"
-                value={data.Password}
+                name="password"
                 placeholder={"Password"}
                 onChange={handleChange}
               />
@@ -123,7 +126,7 @@ const LoginScreen = () => {
             </div>
 
             <div>
-              <ButtonComponent loader={loader} name="Login" />
+              <ButtonComponent loader={loader} name="Login" type="submit" />
               <div
                 style={{
                   color: "#E12F2F",

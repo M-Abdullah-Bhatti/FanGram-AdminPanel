@@ -1,15 +1,16 @@
 import axios from "axios";
+import apiUrl from "../utils/url";
 
 export const axiosInstance = axios.create({
   // baseURL: "https://riwa-backend-7a251027bbd5.herokuapp.com/",
-  baseURL: "http://localhost:5000/",
+  baseURL: apiUrl
 });
 
 axiosInstance.interceptors.request.use(
   function (config) {
     const Info = window.sessionStorage.getItem("info");
     if (Info) {
-      config.headers["Authorization"] = "Bearer " + JSON.parse(Info)?.token;
+      config.headers["Authorization"] = JSON.parse(Info)?.token;
     }
     return config;
   },

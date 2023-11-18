@@ -39,7 +39,7 @@ import DeleteProduct from "../Components/modals/DeleteProduct";
 import {
 	HighlightProduct,
 	getProducts,
-} from "../NetworkCalls/Products/ServerReq";
+} from "../NetworkCalls/ServerReq";
 import ButtonComponent from "../Components/buttton";
 import plus from "../Assets/tabler_plus.svg";
 import ButtonIconComponent from "../Components/ButtonIcons";

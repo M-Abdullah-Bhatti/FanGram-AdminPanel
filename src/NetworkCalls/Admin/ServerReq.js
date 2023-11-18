@@ -1,5 +1,36 @@
 import { axiosInstance } from "../../axios"
 
+
+export const LoginUser=async(user)=>{
+  try{
+    const {data} = await axiosInstance.post(`api/user/login`,user)
+    return data
+  }
+  catch(error)
+  {
+    return error.response.data.message
+  }
+}
+
+
+export const GetAllData=async(endpoint)=>{
+  try{
+    const {data} = await axiosInstance.get(endpoint)
+    return data?.data
+  }
+  catch(error)
+  {
+    return error.response.data.message
+  }
+}
+
+
+
+
+
+
+
+
 export const getAdmins=async()=>{
  try{
    const response=await axiosInstance.get("admin/getAdmin")

@@ -44,9 +44,10 @@ import {
 
 import { spacing } from "@material-ui/system";
 import DeleteUser from "../Components/modals/DeleteUser";
-import { getAdmins } from "../NetworkCalls/Admin/ServerReq";
+import { GetAllData, getAdmins } from "../NetworkCalls/Admin/ServerReq";
 import ButtonComponent from "../Components/buttton";
 import ButtonIconComponent from "../Components/ButtonIcons";
+import SearchBar from "../Components/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -110,9 +111,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: "id", alignment: "left", label: "S.No" },
-  { id: "name", alignment: "left", label: "Full Name" },
-  { id: "email", alignment: "left", label: "Email" },
-  { id: "permissions", alignment: "left", label: "Permissions" },
+  { id: "Celebrity Name", alignment: "left", label: "Celebrity Name" },
+  { id: "Video Price", alignment: "left", label: "Video Price" },
+  { id: "Meet and Greet Price", alignment: "left", label: "Meet and Greet Price" },
+  { id: "Responds In Days?", alignment: "left", label: "Responds In Days?" },
+  { id: "Ratings", alignment: "left", label: "Ratings" },
+  { id: "isFeatured?", alignment: "left", label: "isFeatured?" },
   { id: "actions", alignment: "right", label: "Actions" },
 ];
 
@@ -161,26 +165,29 @@ let EnhancedTableToolbar = (props) => {
   const [searched, setSearched] = React.useState("");
 
   return (
-    <Toolbar>
-      <ToolbarTitle>
-        {numSelected > 0 ? (
-          <Typography color="primary" variant="subtitle1">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <div
+    <Box>
+      
+
+         <Box
             style={{
               display: "flex",
-              width: "350px",
+              width: "100%",
+             
+              justifyContent:"space-between",
               alignItems: "center",
+             
             }}
           >
-            <div style={{ flex: 1, marginRight: "20px" }}>
-              <Typography variant="h6" id="tableTitle">
-                Admins
+            <div style={{ marginLeft:"10px" }}>
+              <Typography variant="h4" id="tableTitle">
+                Celebrities
               </Typography>
             </div>
-            {/* <div style={{ flex: 2 }}>
+            <div style={{  marginRight:"15px", }}>
+
+              <div style={{
+                width:"300px"
+              }}>
               <SearchBar
                 label="Search Name"
                 value={searched}
@@ -189,21 +196,14 @@ let EnhancedTableToolbar = (props) => {
                   props.onSearch(val);
                 }}
               />
-            </div> */}
-          </div>
-        )}
-      </ToolbarTitle>
+              </div>
+            </div>
+          </Box>
+       
+     
       <Spacer />
-      <div>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : null}
-      </div>
-    </Toolbar>
+      
+    </Box>
   );
 };
 
@@ -232,10 +232,9 @@ function EnhancedTable() {
   const getData = async () => {
     try {
       setLoader(true);
-      const adminsData = await getAdmins();
-      console.log("admin data: ", adminsData);
-      setData(adminsData);
-      setFixedData(adminsData);
+      const response = await GetAllData("api/celebrity/getAllCelebrities");
+      setData(response);
+      setFixedData(response);
     } catch (err) {
       console.log(err);
     } finally {
@@ -393,31 +392,54 @@ function EnhancedTable() {
                             <Typography
                               style={{ fontWeight: "600", fontSize: "16px" }}
                             >
-                              {row.FullName}
+                              {row?.name}
                             </Typography>{" "}
                           </TableCell>
                           <TableCell align="left">
                             <Typography
                               style={{ fontWeight: "600", fontSize: "16px" }}
                             >
-                              {row.Email}
+                              {row?.videoPrice}
                             </Typography>{" "}
                           </TableCell>
+
+
                           <TableCell align="left">
                             <Typography
                               style={{ fontWeight: "600", fontSize: "16px" }}
                             >
-                              {" "}
-                              {row.Permission?.map(
-                                (item, ind) =>
-                                  `${filterItem(item)}${
-                                    ind + 1 == row.Permission.length
-                                      ? "."
-                                      : ", "
-                                  }`
-                              )}
+                              {row?.meetAndGreetPrice}
                             </Typography>{" "}
                           </TableCell>
+
+                          <TableCell align="left">
+                            <Typography
+                              style={{ fontWeight: "600", fontSize: "16px" }}
+                            >
+                              {row?.responseInDays}
+                            </Typography>{" "}
+                          </TableCell>
+                          
+
+                          <TableCell align="left">
+                            <Typography
+                              style={{ fontWeight: "600", fontSize: "16px" }}
+                            >
+                              {row?.ratings}
+                            </Typography>{" "}
+                          </TableCell>
+
+
+                          <TableCell align="left">
+                            <Typography
+                              style={{ fontWeight: "600", fontSize: "16px" }}
+                            >
+                              {row?.isFeatured ? "Yes" : "No"}
+                            </Typography>{" "}
+                          </TableCell>
+                          
+
+
 
                           <TableCell padding="none" align="right">
                             <Box mr={2}>
@@ -491,7 +513,7 @@ function EnhancedTable() {
   );
 }
 
-const Suggestions = () => {
+const Celebrities = () => {
   const history = useHistory();
 
   return (
@@ -523,8 +545,8 @@ const Suggestions = () => {
           <ButtonIconComponent
             loader={false}
             imageBool={true}
-            name="Create New Admin"
-            onClick={() => history.push("/dashboard/add_admin")}
+            name="Create New Celebrity"
+            onClick={() => history.push("/dashboard/add_celebrity")}
           />
         </Grid>
       </Grid>
@@ -547,4 +569,4 @@ const Suggestions = () => {
   );
 };
 
-export default Suggestions;
+export default Celebrities;

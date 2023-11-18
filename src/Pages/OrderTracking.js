@@ -44,7 +44,7 @@ import {
 	GetAllAssets,
 	HighlightProduct,
 	getProducts,
-} from "../NetworkCalls/Products/ServerReq";
+} from "../NetworkCalls/ServerReq";
 import { toast } from "react-toastify";
 import plus from "../Assets/tabler_plus.svg";
 import ButtonIconComponent from "../Components/ButtonIcons";

@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import Vector from "../../Assets/error.svg";
-import { deleteProducts } from "../../NetworkCalls/Products/ServerReq";
+import { deleteProducts } from "../../NetworkCalls/ServerReq";
 
 const style = {
   position: "absolute",

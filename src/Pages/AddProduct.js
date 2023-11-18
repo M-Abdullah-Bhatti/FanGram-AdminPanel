@@ -28,7 +28,7 @@ import cross from "../Assets/cross.svg";
 import Drag from "../Components/draganddrop";
 import Successmodal from "../Components/modals/successmodal";
 import { uploadImage } from "../NetworkCalls/firebaseCalls";
-import { addProduct } from "../NetworkCalls/Products/ServerReq";
+import { addProduct } from "../NetworkCalls/ServerReq";
 import InputField from "../Components/inputfield";
 import { SelectInput } from "../Components/SelectInput";
 import ButtonComponent from "../Components/buttton";

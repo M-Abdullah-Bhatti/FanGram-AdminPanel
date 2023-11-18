@@ -8,7 +8,7 @@ import {
   AddCategory,
   GetAllCategories,
   RemoveCategory,
-} from "../NetworkCalls/Products/ServerReq";
+} from "../NetworkCalls/ServerReq";
 import Drag from "../Components/draganddrop";
 import { uploadImage } from "../NetworkCalls/firebaseCalls";
 import { toast } from "react-toastify";
