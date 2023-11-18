@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 import Button from "@mui/material/Button";
+
+// import { Helmet } from "react-helmet-async";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   Box,
@@ -30,21 +38,35 @@ import {
   RemoveRedEye as RemoveRedEyeIcon,
   Delete as DeleteIcon,
   Edit as EditIcon,
+  Fastfood,
   Delete,
 } from "@material-ui/icons";
-import StarIcon from "@mui/icons-material/Star";
+
 import { spacing } from "@material-ui/system";
 import DeleteUser from "../Components/modals/DeleteUser";
-import DeleteProduct from "../Components/modals/DeleteProduct";
-import { HighlightProduct, getProducts } from "../NetworkCalls/ServerReq";
+import { GetAllData, getAdmins } from "../NetworkCalls/Admin/ServerReq";
 import ButtonComponent from "../Components/buttton";
-import plus from "../Assets/tabler_plus.svg";
 import ButtonIconComponent from "../Components/ButtonIcons";
-import star_fill from "../Assets/star-icon.svg";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import SearchBar from "../Components/SearchBar";
+
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 const Divider = styled(MuiDivider)(spacing);
+
 const Paper = styled(MuiPaper)(spacing);
+
 const Chip = styled(MuiChip)`
   ${spacing};
   background: ${(props) => props.shipped && green[500]};
@@ -89,16 +111,22 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: "id", alignment: "left", label: "S.No" },
-  { id: "name", alignment: "left", label: "NFT Name" },
-  { id: "Category", alignment: "left", label: "Category" },
-  { id: "Price", alignment: "left", label: "Price" },
-  { id: "Status", alignment: "left", label: "Status" },
-  { id: "Actions", alignment: "left", label: "Actions" },
-  { id: "ProductId", alignment: "left", label: "ProductId" },
+  { id: "Celebrity Name", alignment: "left", label: "Celebrity Name" },
+  { id: "Order Price", alignment: "left", label: "Order Price" },
+
+  { id: "Order Placed", alignment: "left", label: "Order Placed" },
+  { id: "actions", alignment: "right", label: "Actions" },
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
+  const {
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -135,49 +163,41 @@ let EnhancedTableToolbar = (props) => {
   const [searched, setSearched] = React.useState("");
 
   return (
-    <Toolbar>
-      <ToolbarTitle>
-        {numSelected > 0 ? (
-          <Typography color="primary" variant="subtitle1">
-            {numSelected} selected
+    <Box>
+      <Box
+        style={{
+          display: "flex",
+          width: "100%",
+
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ marginLeft: "10px" }}>
+          <Typography variant="h4" id="tableTitle">
+            Order Requests
           </Typography>
-        ) : (
+        </div>
+        <div style={{ marginRight: "15px" }}>
           <div
             style={{
-              display: "flex",
-              width: "350px",
-              alignItems: "center",
+              width: "300px",
             }}
           >
-            <div style={{ flex: 1, marginRight: "20px" }}>
-              <Typography variant="h6" id="tableTitle">
-                NFTs
-              </Typography>
-            </div>
-            {/* <div style={{ flex: 2 }}>
-              <SearchBar
-                label="Search Name"
-                value={searched}
-                onChange={(val) => {
-                  setSearched(val);
-                  props.onSearch(val);
-                }}
-              />
-            </div> */}
+            <SearchBar
+              label="Search Name"
+              value={searched}
+              onChange={(val) => {
+                setSearched(val);
+                props.onSearch(val);
+              }}
+            />
           </div>
-        )}
-      </ToolbarTitle>
+        </div>
+      </Box>
+
       <Spacer />
-      <div>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : null}
-      </div>
-    </Toolbar>
+    </Box>
   );
 };
 
@@ -191,6 +211,8 @@ function EnhancedTable() {
   let [data, setData] = React.useState([]);
   const [fixedData, setFixedData] = React.useState([]);
   const [Refresh, setRefresh] = React.useState(false);
+  const auth = getAuth();
+  const [currentUserId, setcurrentUserId] = useState("");
 
   useEffect(() => {
     // onAuthStateChanged(auth, (user) => {
@@ -204,10 +226,9 @@ function EnhancedTable() {
   const getData = async () => {
     try {
       setLoader(true);
-      const response = await getProducts();
-      console.log(response, "response");
-      setData(response.data);
-      setFixedData(response.data);
+      const response = await GetAllData("api/order/allOrders");
+      setData(response);
+      setFixedData(response);
     } catch (err) {
       console.log(err);
     } finally {
@@ -250,6 +271,10 @@ function EnhancedTable() {
     setSelected(newSelected);
   };
 
+  const handleCheckPermission = (arr) => {
+    return arr.includes("Admins") || arr.includes("Admin");
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -280,13 +305,34 @@ function EnhancedTable() {
 
   const [open, setOpen] = React.useState(false);
 
-  const [DeleteUid, setDeleteUid] = useState("");
+  const [DeleteUid, setDeleteUid] = useState({});
   const handleOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpen(!open);
   };
+
+  const filterItem = (item) => {
+    return item === "FAQ’s"
+      ? "Products"
+      : item === "Blogs"
+      ? "Offers"
+      : item === "Suggestions"
+      ? "Refund Requests"
+      : item === "Universities"
+      ? "Purchase History"
+      : item;
+  };
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
 
   return (
     <div>
@@ -307,6 +353,7 @@ function EnhancedTable() {
               onSearch={(val) => handleSearch(val)}
               numSelected={selected.length}
             />
+
             <TableContainer style={{ height: "47vh" }}>
               <Table
                 aria-labelledby="tableTitle"
@@ -326,6 +373,8 @@ function EnhancedTable() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       const isItemSelected = isSelected(row.id);
+                      const labelId = `enhanced-table-checkbox-${index}`;
+
                       return (
                         <TableRow
                           hover
@@ -343,113 +392,52 @@ function EnhancedTable() {
                             </Typography>{" "}
                           </TableCell>
                           <TableCell align="left">
-                            {" "}
                             <Typography
                               style={{ fontWeight: "600", fontSize: "16px" }}
                             >
-                              {row.Name}
+                              {row?.celebrityID?.name}
                             </Typography>{" "}
                           </TableCell>
                           <TableCell align="left">
-                            {" "}
                             <Typography
                               style={{ fontWeight: "600", fontSize: "16px" }}
                             >
-                              {row.Category}
+                              {row?.price}
                             </Typography>{" "}
                           </TableCell>
-                          <TableCell align="left">
-                            {" "}
-                            <Typography
-                              style={{ fontWeight: "600", fontSize: "16px" }}
-                            >
-                              {row.Price}
-                            </Typography>{" "}
-                          </TableCell>
-                          <TableCell align="left">
-                            {" "}
-                            <Typography
-                              style={{ fontWeight: "600", fontSize: "16px" }}
-                            >
-                              {row.Status}
-                            </Typography>{" "}
-                          </TableCell>
-                          <TableCell padding="none" align="left">
-                            <Box mr={2}>
-                              {row?.isPurchased ? (
-                                <Tooltip title="Edit Product">
-                                  <IconButton>
-                                    <EditIcon />
-                                  </IconButton>
-                                </Tooltip>
-                              ) : (
-                                <>
-                                  <Link
-                                    to={{
-                                      pathname: "/dashboard/edit_product",
-                                      state: row,
-                                    }}
-                                  >
-                                    <Tooltip title="Edit Product">
-                                      <IconButton>
-                                        <EditIcon />
-                                      </IconButton>
-                                    </Tooltip>
-                                  </Link>
-                                </>
-                              )}
 
+                          <TableCell align="left">
+                            <Typography
+                              style={{ fontWeight: "600", fontSize: "16px" }}
+                            >
+                              {formatDate(row?.createdAt)}
+                            </Typography>{" "}
+                          </TableCell>
+
+                          <TableCell padding="none" align="right">
+                            <Box mr={2}>
                               <Link
                                 to={{
-                                  //   pathname: `/dashboard/editsuggestions/${row.selfId}`,
-                                  pathname: `/dashboard/nfts`,
+                                  pathname: "/dashboard/edit_admin",
+                                  state: row,
                                 }}
                               >
-                                <Tooltip title="Delete Product">
-                                  <IconButton
-                                    onClick={() => {
-                                      row?.isPurchased
-                                        ? console.log("")
-                                        : handleOpen();
-                                      setDeleteUid({
-                                        name: row.Name,
-                                        uid: row._id,
-                                      });
-                                    }}
-                                  >
-                                    <Delete style={{ color: "#E12F2F" }} />
-                                  </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Highlight">
-                                  <IconButton
-                                    onClick={async () => {
-                                      row?.isPurchased
-                                        ? console.log("")
-                                        : await HighlightProduct(row?._id)
-                                            .then(() => getData())
-                                            .catch((e) => getData());
-                                    }}
-                                  >
-                                    {row?.Highlight == 1 ? (
-                                      <StarIcon sx={{ color: "#f7c900" }} />
-                                    ) : (
-                                      <StarOutlineIcon />
-                                    )}
+                                <Tooltip title="Edit Order">
+                                  <IconButton>
+                                    <EditIcon />
                                   </IconButton>
                                 </Tooltip>
                               </Link>
                             </Box>
                           </TableCell>
-                          <TableCell align="left">
-                            <Typography
-                              style={{ fontWeight: "600", fontSize: "16px" }}
-                            >
-                              {row._id}
-                            </Typography>{" "}
-                          </TableCell>
                         </TableRow>
                       );
                     })}
+                  {/* {emptyRows > 0 && (
+                                        <TableRow style={{ height: 53 * emptyRows }}>
+                                            <TableCell colSpan={8} />
+                                        </TableRow>
+                                    )} */}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -464,7 +452,7 @@ function EnhancedTable() {
             />
           </Paper>
 
-          <DeleteProduct
+          <DeleteUser
             open={open}
             data={DeleteUid}
             setData={setData}
@@ -478,7 +466,7 @@ function EnhancedTable() {
   );
 }
 
-const Product = () => {
+const OrderRequests = () => {
   const history = useHistory();
 
   return (
@@ -505,16 +493,6 @@ const Product = () => {
             Dashboard
           </Typography>
         </Grid>
-
-        <Grid item>
-          <ButtonIconComponent
-            loader={false}
-            name="Add New NFTs"
-            onClick={() => history.push("/dashboard/Add_Nft")}
-            icon={plus}
-            imageBool={true}
-          />
-        </Grid>
       </Grid>
 
       <Divider
@@ -535,4 +513,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default OrderRequests;
