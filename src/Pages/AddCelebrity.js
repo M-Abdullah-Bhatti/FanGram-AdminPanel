@@ -33,6 +33,8 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import ButtonIconComponent from "../Components/ButtonIcons";
+import { PostData } from "../NetworkCalls/Admin/ServerReq";
+import { toast } from "react-toastify";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -184,17 +186,6 @@ const handlePriceChange = (e, checkboxes, setter) => {
 const handleAddNewCelebrity = async(e)=>{
 	e.preventDefault()
 
-	const formData = new FormData();
-
-	console.log("tempimg")
-	console.log(tempimg)
-
-	console.log("imgweb")
-	console.log(imgweb)
-
-	 if (tempimg) {
-    formData.append("celebrityImage", tempimg);
-  }
 
 	const requestBody = {
   name: data.name, 
@@ -219,8 +210,18 @@ const handleAddNewCelebrity = async(e)=>{
   })),
 };
 
-console.log("requestBody")
-console.log(requestBody)
+   const response = await PostData("api/celebrity/addNewCelebrity", requestBody)
+
+   console.log("response")
+   console.log(response)
+
+   if(response?.status){
+	toast.success(response?.message)
+   }else{
+	toast.error(response?.message)
+   }
+
+
 
 }
 

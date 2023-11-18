@@ -6,7 +6,6 @@ import { styled } from '@mui/system';
 import WarningIcon from '@mui/icons-material/Warning';
 import Vector from "../../Assets/error.svg";
 // import { deleteUser } from '../../NetworkCalls/firestoreCalls';
-import { deleteAdmin } from '../../NetworkCalls/Admin/ServerReq';
 
 const style = {
     position: 'absolute',
@@ -120,22 +119,22 @@ export default function DeleteUser({ handleClose, open, data, setRefresh, setDat
     const [Open2, setOpen] = React.useState(false);
 
 
-    const _DeleteUser = async (uid) => {
+    // const _DeleteUser = async (uid) => {
 
-        setData(items => items.filter(it => it?._id != uid))
-        setLoading(true);
-        const api = await deleteAdmin(uid);
-        if (api.status === 200) {
-            setLoading(false);
-            handleClose()
-            handleModal2();
+    //     setData(items => items.filter(it => it?._id != uid))
+    //     setLoading(true);
+    //     const api = await deleteAdmin(uid);
+    //     if (api.status === 200) {
+    //         setLoading(false);
+    //         handleClose()
+    //         handleModal2();
 
-        } else {
-            setLoading(false);
-            alert("user deletion failed")
-            handleClose();
-        }
-    }
+    //     } else {
+    //         setLoading(false);
+    //         alert("user deletion failed")
+    //         handleClose();
+    //     }
+    // }
     const handleModal2 = () => {
         setOpen(!Open2);
     };
@@ -161,7 +160,7 @@ export default function DeleteUser({ handleClose, open, data, setRefresh, setDat
                     </Paragraph> */}
                     <Row>
                         <Discard disabled={Loading} onClick={handleClose}>Discard</Discard>
-                        <Delete disabled={Loading} onClick={() => _DeleteUser(data.uid)}>Delete</Delete>
+                        {/* <Delete disabled={Loading} onClick={() => _DeleteUser(data.uid)}>Delete</Delete> */}
                     </Row>
                 </Box>
             </Modal>

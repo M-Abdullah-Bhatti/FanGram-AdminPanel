@@ -17,7 +17,6 @@ import {
 import { spacing } from "@material-ui/system";
 import { useHistory } from "react-router-dom";
 import CheckboxLabels from "../Components/Checkbox";
-import { updateAdmin } from "../NetworkCalls/Admin/ServerReq";
 import InputField from "../Components/inputfield";
 import ButtonComponent from "../Components/buttton";
 
@@ -103,48 +102,48 @@ const EditUser = () => {
   }
 
 
-  async function handleClick(event) {
-    event.preventDefault();
+  // async function handleClick(event) {
+  //   event.preventDefault();
 
-    // if (data.rePassword !== data.password) return setError("Password didn't matched!")
+  //   // if (data.rePassword !== data.password) return setError("Password didn't matched!")
 
-    // if (data.password.split("").length < 6) return setError('Password should be at least 6 characters!')
-    const permissions = Checkboxes.filter(item => item.Check);
+  //   // if (data.password.split("").length < 6) return setError('Password should be at least 6 characters!')
+  //   const permissions = Checkboxes.filter(item => item.Check);
 
-    if (permissions.length == 0) return setError('Please select atleast 1 permission!')
+  //   if (permissions.length == 0) return setError('Please select atleast 1 permission!')
 
 
 
-    try {
+  //   try {
 
-      setLoader(true);
-      setError("");
-      const { AdminId, ...rest } = data
-      console.log(rest)
-      const res = await updateAdmin(data._id, {
-        ...rest,
-        Permission: permissions.map(item => item.Label),
-      })
-      console.log(res);
-      if (res.status == 200) {
-        setLoader(false);
-        history.push({ pathname: "/dashboard/admins" });
+  //     setLoader(true);
+  //     setError("");
+  //     const { AdminId, ...rest } = data
+  //     console.log(rest)
+  //     const res = await updateAdmin(data._id, {
+  //       ...rest,
+  //       Permission: permissions.map(item => item.Label),
+  //     })
+  //     console.log(res);
+  //     if (res.status == 200) {
+  //       setLoader(false);
+  //       history.push({ pathname: "/dashboard/admins" });
 
-      } else {
-        setError(res.error.message);
-        setLoader(false);
+  //     } else {
+  //       setError(res.error.message);
+  //       setLoader(false);
 
-      }
+  //     }
 
-    } catch (err) {
-      console.log("err", err);
-      setError("Something went wrong!");
-      setLoader(false);
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     setError("Something went wrong!");
+  //     setLoader(false);
 
-    } finally {
-      setLoader(false);
-    }
-  }
+  //   } finally {
+  //     setLoader(false);
+  //   }
+  // }
 
   return (
     <React.Fragment>
