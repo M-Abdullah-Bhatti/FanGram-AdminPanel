@@ -66,11 +66,8 @@ const AddCelebrity = () => {
   const [loader, setLoader] = useState(false);
   const [imgweb, setImgweb] = useState("");
   const [tempimg, setTempimg] = useState("");
-  const [offers, setOffers] = useState([
-    { title: "", description: "", price: "" },
-  ]);
-
   const [data, setData] = useState({});
+  
 
   const { setDragOver, onDragOver, onDragLeave, setFileDropError } = Drag();
 
@@ -142,47 +139,98 @@ const AddCelebrity = () => {
     });
   };
 
-  const addCheckboxesTags = (e) => {
+
+
+
+const handleCheckboxChange = (checkboxes, index, value) => {
+  const updatedCheckboxes = [...checkboxes];
+
+  if (value) {
+    updatedCheckboxes[index].price = value;
+  }
+  else if(!value){
+	updatedCheckboxes[index].Check = !updatedCheckboxes[index].Check;
+  }
+  return updatedCheckboxes;
+};
+
+
+
+
+ const addCheckboxes = (e, checkboxes, setter) => {
     const { name } = e.target;
-
-    const update = CheckboxesTags.map((item) =>
-      item.Label === name ? { ...item, Check: !item.Check } : item
+    const updatedCheckboxes = handleCheckboxChange(
+      checkboxes,
+      checkboxes.findIndex((item) => item.Label === name)
     );
-    setCheckboxesTags(update);
+    setter(updatedCheckboxes);
   };
 
-  const addCheckboxesCategories = (e) => {
-    const { name } = e.target;
 
-    const update = CheckboxesCategories.map((item) =>
-      item.Label === name ? { ...item, Check: !item.Check } : item
-    );
-    setCheckboxesCategories(update);
-  };
 
-  const addCheckboxExtras = (index) => {
-    const updatedExtras = [...CheckboxesExtras];
-    updatedExtras[index].Check = !updatedExtras[index].Check;
-    setCheckboxesExtras(updatedExtras);
-  };
+const handlePriceChange = (e, checkboxes, setter) => {
+  const { name, value } = e.target;
+  const itemName = name.split('_')[1];  
+  const index = checkboxes.findIndex((item) => item.Label === itemName);
+  const updatedCheckboxes = handleCheckboxChange(checkboxes, index, value);
+  setter(updatedCheckboxes);
+};
 
-  const handlePriceChangeExtras = (index, value) => {
-    const updatedExtras = [...CheckboxesExtras];
-    updatedExtras[index].price = value;
-    setCheckboxesExtras(updatedExtras);
-  };
 
-  const addCheckboxOffers = (index) => {
-    const updatedOffers = [...CheckboxesOffers];
-    updatedOffers[index].Check = !updatedOffers[index].Check;
-    setCheckboxesOffers(updatedOffers);
-  };
 
-  const handlePriceChangeOffers = (index, value) => {
-    const updatedOffers = [...CheckboxesOffers];
-    updatedOffers[index].price = value;
-    setCheckboxesOffers(updatedOffers);
-  };
+
+
+
+const handleAddNewCelebrity = async(e)=>{
+	e.preventDefault()
+
+	const formData = new FormData();
+
+	console.log("tempimg")
+	console.log(tempimg)
+
+	console.log("imgweb")
+	console.log(imgweb)
+
+	 if (tempimg) {
+    formData.append("celebrityImage", tempimg);
+  }
+
+	const requestBody = {
+  name: data.name, 
+  description: data.description,
+  celebrityImage: tempimg,
+  videoPrice: parseInt(data.videoPrice),
+  meetAndGreetPrice: parseInt(data.meetAndGreetPrice),
+  fanDiscount: data.fanDiscount,
+  tags: CheckboxesTags.filter((item) => item.Check).map((item) => item.Label),
+  categories: CheckboxesCategories.filter((item) => item.Check).map(
+    (item) => item.Label
+  ),
+  responseInDays: parseInt(data.responseInDays),
+  isFeatured: data.isFeatured === "Yes" ? true : false , 
+  offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
+    title: item.Label,
+    price: item.price, 
+  })),
+   extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
+    title: item.Label,
+    price: item.price, 
+  })),
+};
+
+console.log("requestBody")
+console.log(requestBody)
+
+}
+
+
+
+
+
+
+
+
 
   return (
     <React.Fragment>
@@ -267,8 +315,23 @@ const AddCelebrity = () => {
                       <input
                         type="file"
                         name="WebImage"
-                        onChange={(e) => {
-                          setTempimg(e.target.files[0]);
+						 accept="image/*"
+                        // onChange={(e) => {
+                        //   setTempimg(e.target.files[0]);
+                        // }}
+						 onChange={(e) => {
+							
+      const reader = new FileReader()
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setTempimg(reader.result);
+        }
+      }
+
+      reader.readAsDataURL(e.target.files[0])
+
+                        //   setTempimg(e.target.files[0]);
                         }}
                         id="upload-photo"
                         style={{ display: "none" }}
@@ -295,15 +358,21 @@ const AddCelebrity = () => {
                     >
                       <input
                         type="file"
+						 accept="image/*"
                         name="WebImage"
                         onChange={(e) => {
-                          // UploadImage({ img: e.target.files[0] }).then(
-                          //   (res) => {
-                          //     setImgweb(res);
+							
+      const reader = new FileReader()
 
-                          //   }
-                          // );
-                          setTempimg(e.target.files[0]);
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setTempimg(reader.result);
+        }
+      }
+
+      reader.readAsDataURL(e.target.files[0])
+
+                        //   setTempimg(e.target.files[0]);
                         }}
                         id="upload-photo"
                         style={{ display: "none" }}
@@ -331,7 +400,8 @@ const AddCelebrity = () => {
                       ) : (
                         <img
                           alt="logo"
-                          src={URL.createObjectURL(tempimg)}
+                        //   src={URL.createObjectURL(tempimg)}
+						src={tempimg}
                           style={{ width: "100%", height: "100%" }}
                         />
                       )}
@@ -426,7 +496,7 @@ const AddCelebrity = () => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Enter menu category"
-                  name="businessCategory"
+                  name="isFeatured"
                   required
                   onChange={handleOnchange}
                 >
@@ -480,7 +550,8 @@ const AddCelebrity = () => {
           >
             {CheckboxesTags.map((item) => (
               <CheckboxLabels
-                onClick={addCheckboxesTags}
+                // onClick={addCheckboxesTags}
+				 onClick={(e) => addCheckboxes(e, CheckboxesTags, setCheckboxesTags)}
                 check={item.Check}
                 Label={item.Label}
               />
@@ -508,7 +579,8 @@ const AddCelebrity = () => {
           >
             {CheckboxesCategories.map((item) => (
               <CheckboxLabels
-                onClick={addCheckboxesCategories}
+                // onClick={addCheckboxesCategories}
+				onClick={(e) => addCheckboxes(e, CheckboxesCategories, setCheckboxesCategories)}
                 check={item.Check}
                 Label={item.Label}
               />
@@ -536,10 +608,11 @@ const AddCelebrity = () => {
                   }}
                 >
                   <CheckboxLabels
-                    onClick={() => addCheckboxOffers(index)}
+                    // onClick={() => addCheckboxOffers(index)}
+					onClick={(e) => addCheckboxes(e, CheckboxesOffers, setCheckboxesOffers)}
                     check={item.Check}
                     Label={item.Label}
-                  />
+					 />
 
                   <Grid item xs={12} xl={4} lg={4} md={4}>
                     <TextField
@@ -548,10 +621,10 @@ const AddCelebrity = () => {
                       variant="outlined"
                       required
                       type="number"
-                      name="price"
-                      onChange={(e) =>
-                        handlePriceChangeOffers(index, e.target.value)
-                      }
+                   
+					name={`price_${item.Label}`}
+                    
+					onChange={(e) => handlePriceChange(e, CheckboxesOffers, setCheckboxesOffers)}
                       fullWidth={true}
                     />
                   </Grid>
@@ -584,7 +657,8 @@ const AddCelebrity = () => {
                   }}
                 >
                   <CheckboxLabels
-                    onClick={() => addCheckboxExtras(index)}
+                    // onClick={() => addCheckboxExtras(index)}
+					onClick={(e) => addCheckboxes(e, CheckboxesExtras, setCheckboxesExtras)}
                     check={item.Check}
                     Label={item.Label}
                   />
@@ -596,10 +670,8 @@ const AddCelebrity = () => {
                       variant="outlined"
                       required
                       type="number"
-                      name="price"
-                      onChange={(e) =>
-                        handlePriceChangeExtras(index, e.target.value)
-                      }
+                      name={`price_${item.Label}`}
+					onChange={(e) => handlePriceChange(e, CheckboxesExtras, setCheckboxesExtras)}
                       fullWidth={true}
                     />
                   </Grid>
@@ -617,7 +689,7 @@ const AddCelebrity = () => {
             justifyContent="center"
             sx={{ marginTop: "30px", width: "50%" }}
           >
-            <ButtonComponent loader={loader} name="Save" dashboard={true} />
+            <ButtonComponent loader={loader} name="Save" dashboard={true} onClick={handleAddNewCelebrity} />
           </Grid>
         </form>
       </div>
