@@ -37,6 +37,7 @@ import { EditData, GetSingleData, PostData } from "../NetworkCalls/Admin/ServerR
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import UploadImage from "../Components/uploadimage";
+import AllVideos from "../Components/AllVideos";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -599,6 +600,10 @@ const EditCelebrity = () => {
               </FormControl>
             </Grid>
 
+         
+
+
+
             {/* Description */}
 
             <Grid item xs={12} xl={12} lg={12} md={12}>
@@ -619,6 +624,9 @@ const EditCelebrity = () => {
               />
             </Grid>
           </Grid>
+
+
+          
 
           {/* Tags */}
 
@@ -802,6 +810,13 @@ const EditCelebrity = () => {
           <Box mt={2}>
             <Typography style={{ color: "#E12F2F" }}>{Error}</Typography>
           </Box>
+
+
+             {/* Recent Videos */}
+<Box my={5}>
+  <Typography variant="h6" style={{marginBottom:"10px"}}>{data?.name} Recent Videos</Typography>
+           <AllVideos celebrityID={params?.celebrityid} />
+           </Box>
 
           <Grid
             container

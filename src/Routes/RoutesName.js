@@ -20,6 +20,7 @@ import SettingsPage from "../Pages/SettingsPage";
 import EditOrder from "../Pages/editOrder";
 import OrderTracking from "../Pages/OrderTracking";
 import AddRecentVideo from "../Pages/AddRecentVideo";
+import EditRecentVideo from "../Pages/EditRecentVideo";
 
 const Abc = () => <></>;
 
@@ -71,6 +72,7 @@ export const routes = [
 
 export const Editroutes = [
   { name: "edit_celebrity/:celebrityId", icon: <PersonIcon />, component: EditCelebrity },
+  { name: ":celebrityId/edit_video/:videoId", icon: <PersonIcon />, component: EditRecentVideo },
   // { name: "Edit_Product", icon: <TokenIcon />, component: EditProduct },
   // { name: "Edit_Offer", icon: <LocalOfferIcon />, component: Abc },
   {
