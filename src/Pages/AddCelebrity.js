@@ -35,6 +35,7 @@ import {
 import ButtonIconComponent from "../Components/ButtonIcons";
 import { PostData } from "../NetworkCalls/Admin/ServerReq";
 import { toast } from "react-toastify";
+import UploadImage from "../Components/uploadimage";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -69,7 +70,12 @@ const AddCelebrity = () => {
   const [imgweb, setImgweb] = useState("");
   const [tempimg, setTempimg] = useState("");
   const [data, setData] = useState({});
-  
+
+  console.log("imgweb");
+  console.log(imgweb);
+
+  console.log("tempimg");
+  console.log(tempimg);
 
   const { setDragOver, onDragOver, onDragLeave, setFileDropError } = Drag();
 
@@ -141,25 +147,18 @@ const AddCelebrity = () => {
     });
   };
 
+  const handleCheckboxChange = (checkboxes, index, value) => {
+    const updatedCheckboxes = [...checkboxes];
 
+    if (value) {
+      updatedCheckboxes[index].price = value;
+    } else if (!value) {
+      updatedCheckboxes[index].Check = !updatedCheckboxes[index].Check;
+    }
+    return updatedCheckboxes;
+  };
 
-
-const handleCheckboxChange = (checkboxes, index, value) => {
-  const updatedCheckboxes = [...checkboxes];
-
-  if (value) {
-    updatedCheckboxes[index].price = value;
-  }
-  else if(!value){
-	updatedCheckboxes[index].Check = !updatedCheckboxes[index].Check;
-  }
-  return updatedCheckboxes;
-};
-
-
-
-
- const addCheckboxes = (e, checkboxes, setter) => {
+  const addCheckboxes = (e, checkboxes, setter) => {
     const { name } = e.target;
     const updatedCheckboxes = handleCheckboxChange(
       checkboxes,
@@ -168,88 +167,79 @@ const handleCheckboxChange = (checkboxes, index, value) => {
     setter(updatedCheckboxes);
   };
 
+  const handlePriceChange = (e, checkboxes, setter) => {
+    const { name, value } = e.target;
+    const itemName = name.split("_")[1];
+    const index = checkboxes.findIndex((item) => item.Label === itemName);
+    const updatedCheckboxes = handleCheckboxChange(checkboxes, index, value);
+    setter(updatedCheckboxes);
+  };
+
+  const handleAddNewCelebrity = async (e) => {
+    e.preventDefault();
+
+    setLoader(true);
 
 
-const handlePriceChange = (e, checkboxes, setter) => {
-  const { name, value } = e.target;
-  const itemName = name.split('_')[1];  
-  const index = checkboxes.findIndex((item) => item.Label === itemName);
-  const updatedCheckboxes = handleCheckboxChange(checkboxes, index, value);
-  setter(updatedCheckboxes);
-};
-
-
-
-
-
-const handleAddNewCelebrity = async(e)=>{
-	e.preventDefault()
-
-	setLoader(true)
+	 UploadImage({ img: tempimg }).then(async (res) => {
+        setImgweb(res)
 
 
 	const requestBody = {
-  name: data.name, 
-  description: data.description,
-  celebrityImage: tempimg,
-  videoPrice: parseInt(data.videoPrice),
-  meetAndGreetPrice: parseInt(data.meetAndGreetPrice),
-  fanDiscount: data.fanDiscount,
+      name: data?.name,
+      description: data?.description,
+      celebrityImage: res,
+      videoPrice: parseInt(data?.videoPrice),
+      meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
+      fanDiscount: data?.fanDiscount,
+
+      tags: CheckboxesTags.filter((item) => item.Check).map(
+        (item) => item.Label
+      ),
+
+      categories: CheckboxesCategories.filter((item) => item.Check).map(
+        (item) => item.Label
+      ),
+      responseInDays: parseInt(data?.responseInDays),
+
+      isFeatured: data?.isFeatured === "Yes" ? true : false,
+
+      offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
+        title: item.Label,
+        price: item.price,
+      })),
+
+      extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
+        title: item.Label,
+        price: item.price,
+      })),
+    };
+
+    const response = await PostData(
+      "api/celebrity/addNewCelebrity",
+      requestBody
+    );
+
   
-  tags: CheckboxesTags.filter((item) => item.Check).map((item) => item.Label),
+    if (response?.status) {
+      toast.success(response?.message);
 
-  categories: CheckboxesCategories.filter((item) => item.Check).map(
-    (item) => item.Label
-  ),
-  responseInDays: parseInt(data.responseInDays),
+      setLoader(false);
 
-  isFeatured: data.isFeatured === "Yes" ? true : false , 
-
-  offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
-    title: item.Label,
-    price: item.price, 
-  })),
-
-   extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
-    title: item.Label,
-    price: item.price, 
-  })),
-};
+      // Emptying Form Fields
+      setData({});
+      setTempimg("");
+      setImgweb("");
+    } else {
+      toast.error(response?.message);
+    }
 
 
 
-   const response = await PostData("api/celebrity/addNewCelebrity", requestBody)
+	 })
 
-   
-
-   console.log("response")
-   console.log(response)
-
-   if(response?.status){
-	toast.success(response?.message)
-
-	setLoader(false)
-
-	// Emptying Form Fields
-	setData({})
-	setTempimg("")
-	setImgweb("")
-	
-   }else{
-	toast.error(response?.message)
-   }
-
-
-
-}
-
-
-
-
-
-
-
-
+  
+  };
 
   return (
     <React.Fragment>
@@ -334,23 +324,8 @@ const handleAddNewCelebrity = async(e)=>{
                       <input
                         type="file"
                         name="WebImage"
-						 accept="image/*"
-                        // onChange={(e) => {
-                        //   setTempimg(e.target.files[0]);
-                        // }}
-						 onChange={(e) => {
-							
-      const reader = new FileReader()
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setTempimg(reader.result);
-        }
-      }
-
-      reader.readAsDataURL(e.target.files[0])
-
-                        //   setTempimg(e.target.files[0]);
+                        onChange={(e) => {
+                          setTempimg(e.target.files[0]);
                         }}
                         id="upload-photo"
                         style={{ display: "none" }}
@@ -377,21 +352,19 @@ const handleAddNewCelebrity = async(e)=>{
                     >
                       <input
                         type="file"
-						 accept="image/*"
+                        //  accept="image/*"
                         name="WebImage"
                         onChange={(e) => {
-							
-      const reader = new FileReader()
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setTempimg(reader.result);
-        }
-      }
-
-      reader.readAsDataURL(e.target.files[0])
-
-                        //   setTempimg(e.target.files[0]);
+                          UploadImage({ img: e.target.files[0] })
+                            .then((res) => {
+                              console.log("Image uploaded successfully:", res);
+                              setImgweb(res);
+                            })
+                            .catch((error) => {
+                              console.error("Error uploading image:", error);
+                              // Handle the error, e.g., display an error message
+                            });
+                          setTempimg(e.target.files[0]);
                         }}
                         id="upload-photo"
                         style={{ display: "none" }}
@@ -419,8 +392,8 @@ const handleAddNewCelebrity = async(e)=>{
                       ) : (
                         <img
                           alt="logo"
-                        //   src={URL.createObjectURL(tempimg)}
-						src={tempimg}
+                          src={URL.createObjectURL(tempimg)}
+                          // src={tempimg}
                           style={{ width: "100%", height: "100%" }}
                         />
                       )}
@@ -457,11 +430,11 @@ const handleAddNewCelebrity = async(e)=>{
               <TextField
                 id="outlined-basic"
                 type="number"
-				InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                  },
+                }}
                 name="responseInDays"
                 label="Respond In Days"
                 variant="outlined"
@@ -478,11 +451,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
-					InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                  },
+                }}
                 placeholder="Video Price"
                 name="videoPrice"
                 onChange={handleOnchange}
@@ -497,11 +470,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
-					InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                  },
+                }}
                 name="meetAndGreetPrice"
                 onChange={handleOnchange}
                 fullWidth={true}
@@ -515,11 +488,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
-					InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
+                InputProps={{
+                  inputProps: {
+                    min: 0,
+                  },
+                }}
                 name="fanDiscount"
                 onChange={handleOnchange}
                 fullWidth={true}
@@ -590,7 +563,9 @@ const handleAddNewCelebrity = async(e)=>{
             {CheckboxesTags.map((item) => (
               <CheckboxLabels
                 // onClick={addCheckboxesTags}
-				 onClick={(e) => addCheckboxes(e, CheckboxesTags, setCheckboxesTags)}
+                onClick={(e) =>
+                  addCheckboxes(e, CheckboxesTags, setCheckboxesTags)
+                }
                 check={item.Check}
                 Label={item.Label}
               />
@@ -619,7 +594,13 @@ const handleAddNewCelebrity = async(e)=>{
             {CheckboxesCategories.map((item) => (
               <CheckboxLabels
                 // onClick={addCheckboxesCategories}
-				onClick={(e) => addCheckboxes(e, CheckboxesCategories, setCheckboxesCategories)}
+                onClick={(e) =>
+                  addCheckboxes(
+                    e,
+                    CheckboxesCategories,
+                    setCheckboxesCategories
+                  )
+                }
                 check={item.Check}
                 Label={item.Label}
               />
@@ -629,13 +610,11 @@ const handleAddNewCelebrity = async(e)=>{
           {/* Offers */}
 
           <Box mt={5}>
-            
-              <Typography variant="h6" color="text.primary">
-                Select Celebrity Offers *
-              </Typography>
+            <Typography variant="h6" color="text.primary">
+              Select Celebrity Offers *
+            </Typography>
 
-
-			    <Box mt={1}>
+            <Box mt={1}>
               {CheckboxesOffers.map((item, index) => (
                 <Box
                   style={{
@@ -648,10 +627,12 @@ const handleAddNewCelebrity = async(e)=>{
                 >
                   <CheckboxLabels
                     // onClick={() => addCheckboxOffers(index)}
-					onClick={(e) => addCheckboxes(e, CheckboxesOffers, setCheckboxesOffers)}
+                    onClick={(e) =>
+                      addCheckboxes(e, CheckboxesOffers, setCheckboxesOffers)
+                    }
                     check={item.Check}
                     Label={item.Label}
-					 />
+                  />
 
                   <Grid item xs={12} xl={4} lg={4} md={4}>
                     <TextField
@@ -660,28 +641,26 @@ const handleAddNewCelebrity = async(e)=>{
                       variant="outlined"
                       required
                       type="number"
-					  	InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
-                   
-					name={`price_${item.Label}`}
-                    
-					onChange={(e) => handlePriceChange(e, CheckboxesOffers, setCheckboxesOffers)}
+                      InputProps={{
+                        inputProps: {
+                          min: 0,
+                        },
+                      }}
+                      name={`price_${item.Label}`}
+                      onChange={(e) =>
+                        handlePriceChange(
+                          e,
+                          CheckboxesOffers,
+                          setCheckboxesOffers
+                        )
+                      }
                       fullWidth={true}
                     />
                   </Grid>
                 </Box>
               ))}
             </Box>
-
-
-            
           </Box>
-
-          
-
 
           {/* Extras */}
           <Box mt={5}>
@@ -702,7 +681,9 @@ const handleAddNewCelebrity = async(e)=>{
                 >
                   <CheckboxLabels
                     // onClick={() => addCheckboxExtras(index)}
-					onClick={(e) => addCheckboxes(e, CheckboxesExtras, setCheckboxesExtras)}
+                    onClick={(e) =>
+                      addCheckboxes(e, CheckboxesExtras, setCheckboxesExtras)
+                    }
                     check={item.Check}
                     Label={item.Label}
                   />
@@ -714,13 +695,19 @@ const handleAddNewCelebrity = async(e)=>{
                       variant="outlined"
                       required
                       type="number"
-					  	InputProps={{
-        inputProps: { 
-             min: 0 
-        }
-    }}
+                      InputProps={{
+                        inputProps: {
+                          min: 0,
+                        },
+                      }}
                       name={`price_${item.Label}`}
-					onChange={(e) => handlePriceChange(e, CheckboxesExtras, setCheckboxesExtras)}
+                      onChange={(e) =>
+                        handlePriceChange(
+                          e,
+                          CheckboxesExtras,
+                          setCheckboxesExtras
+                        )
+                      }
                       fullWidth={true}
                     />
                   </Grid>
@@ -738,7 +725,12 @@ const handleAddNewCelebrity = async(e)=>{
             justifyContent="center"
             sx={{ marginTop: "30px", width: "50%" }}
           >
-            <ButtonComponent loader={loader} name="Add Celebrity" dashboard={true} onClick={handleAddNewCelebrity} />
+            <ButtonComponent
+              loader={loader}
+              name="Add Celebrity"
+              dashboard={true}
+              onClick={handleAddNewCelebrity}
+            />
           </Grid>
         </form>
       </div>

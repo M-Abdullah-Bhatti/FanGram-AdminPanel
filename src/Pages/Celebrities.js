@@ -280,7 +280,7 @@ function EnhancedTable() {
       return;
     }
     const filteredRows = fixedData.filter((row) => {
-      return row.title?.toLowerCase().includes(val?.toLowerCase());
+      return row.name?.toLowerCase().includes(val?.toLowerCase());
     });
     console.log(filteredRows);
     setData(filteredRows);
@@ -432,23 +432,7 @@ function EnhancedTable() {
                                   </IconButton>
                                 </Tooltip>
                               </Link>
-                              <span
-                                // to={{
-                                //   pathname: `/dashboard/celebrities`,
-                                // }}
-                              >
-                                <Tooltip title={`Delete Celebrity: ${row?.name}`}>
-                                  <IconButton
-                                    onClick={() => {
-                                      handleOpen();
-                                      // handleDeleteCelebrity(row?._id);
-                                      setCurrentCelebrityId(row?._id)
-                                    }}
-                                  >
-                                    <Delete style={{ color: "#E12F2F" }} />
-                                  </IconButton>
-                                </Tooltip>
-                              </span>
+                              
                             </Box>
                           </TableCell>
                         </TableRow>
@@ -473,13 +457,13 @@ function EnhancedTable() {
             />
           </Paper>
 
-          <DeleteUser
+          {/* <DeleteUser
             open={open}
             currentCelebrityId={currentCelebrityId}
             handleOpen={handleOpen}
             setRefresh={setRefresh}
             handleClose={handleClose}
-          />
+          /> */}
         </>
       )}
     </div>
