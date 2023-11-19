@@ -182,9 +182,10 @@ const handlePriceChange = (e, checkboxes, setter) => {
 
 
 
-
 const handleAddNewCelebrity = async(e)=>{
 	e.preventDefault()
+
+	setLoader(true)
 
 
 	const requestBody = {
@@ -210,13 +211,25 @@ const handleAddNewCelebrity = async(e)=>{
   })),
 };
 
+
+
    const response = await PostData("api/celebrity/addNewCelebrity", requestBody)
+
+   
 
    console.log("response")
    console.log(response)
 
    if(response?.status){
 	toast.success(response?.message)
+
+	setLoader(false)
+
+	// Emptying Form Fields
+	setData({})
+	setTempimg("")
+	setImgweb("")
+	
    }else{
 	toast.error(response?.message)
    }
@@ -439,6 +452,11 @@ const handleAddNewCelebrity = async(e)=>{
               <TextField
                 id="outlined-basic"
                 type="number"
+				InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                 name="responseInDays"
                 label="Respond In Days"
                 variant="outlined"
@@ -455,6 +473,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
+					InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                 placeholder="Video Price"
                 name="videoPrice"
                 onChange={handleOnchange}
@@ -469,6 +492,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
+					InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                 name="meetAndGreetPrice"
                 onChange={handleOnchange}
                 fullWidth={true}
@@ -482,6 +510,11 @@ const handleAddNewCelebrity = async(e)=>{
                 variant="outlined"
                 required
                 type="number"
+					InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                 name="fanDiscount"
                 onChange={handleOnchange}
                 fullWidth={true}
@@ -622,6 +655,11 @@ const handleAddNewCelebrity = async(e)=>{
                       variant="outlined"
                       required
                       type="number"
+					  	InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                    
 					name={`price_${item.Label}`}
                     
@@ -671,6 +709,11 @@ const handleAddNewCelebrity = async(e)=>{
                       variant="outlined"
                       required
                       type="number"
+					  	InputProps={{
+        inputProps: { 
+             min: 0 
+        }
+    }}
                       name={`price_${item.Label}`}
 					onChange={(e) => handlePriceChange(e, CheckboxesExtras, setCheckboxesExtras)}
                       fullWidth={true}
@@ -690,7 +733,7 @@ const handleAddNewCelebrity = async(e)=>{
             justifyContent="center"
             sx={{ marginTop: "30px", width: "50%" }}
           >
-            <ButtonComponent loader={loader} name="Save" dashboard={true} onClick={handleAddNewCelebrity} />
+            <ButtonComponent loader={loader} name="Add Celebrity" dashboard={true} onClick={handleAddNewCelebrity} />
           </Grid>
         </form>
       </div>
