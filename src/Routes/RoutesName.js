@@ -6,7 +6,7 @@ import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import PersonIcon from "@mui/icons-material/Person";
-import Products from "../Pages/Products";
+
 import Celebrities from "../Pages/Celebrities";
 import AddProduct from "../Pages/AddProduct";
 import EditProduct from "../Pages/EditProduct";
@@ -21,6 +21,7 @@ import EditOrder from "../Pages/editOrder";
 import OrderTracking from "../Pages/OrderTracking";
 import AddRecentVideo from "../Pages/AddRecentVideo";
 import EditRecentVideo from "../Pages/EditRecentVideo";
+import AddFAQs from "../Pages/AddFAQs";
 
 const Abc = () => <></>;
 
@@ -32,10 +33,10 @@ export const routes = [
     component: Celebrities,
   },
   {
-    title: "NFTs",
-    name: "NFTs",
+    title: "Add FAQs",
+    name: "FAQs",
     icon: <TokenIcon />,
-    component: Products,
+    component: AddFAQs,
   },
   // { title: "Offers", name: "Offers", icon: <LocalOfferIcon />, component: Abc },
   {
