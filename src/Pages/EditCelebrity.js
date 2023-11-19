@@ -202,10 +202,12 @@ const EditCelebrity = () => {
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
-    setData((preValue) => {
+    setData((prevData) => {
+      // Convert the string 'true'/'false' back to boolean
+      const updatedValue = name === "isFeatured" ? value === "true" : value;
       return {
-        ...preValue,
-        [name]: value,
+        ...prevData,
+        [name]: updatedValue,
       };
     });
   };
@@ -271,6 +273,8 @@ const EditCelebrity = () => {
         })),
       };
 
+      console.log("handle submit: ", requestBody);
+
       const response = await EditData(
         `api/celebrity/update/${params?.celebrityid}`,
         requestBody
@@ -285,6 +289,8 @@ const EditCelebrity = () => {
       }
     });
   };
+
+  console.log("data?.isFeatured: ", data?.isFeatured);
 
   return (
     <React.Fragment>
@@ -562,12 +568,12 @@ const EditCelebrity = () => {
                   label="Enter menu category"
                   name="isFeatured"
                   required
-                  value={data?.isFeatured ? "Yes" : "No"}
+                  value={data?.isFeatured ? "true" : "false"} // make sure this matches the string values in MenuItem
                   onChange={handleOnchange}
                 >
                   {[
-                    { value: true, label: "Yes" },
-                    { value: false, label: "No" },
+                    { value: "true", label: "Yes" },
+                    { value: "false", label: "No" },
                   ].map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.label}
