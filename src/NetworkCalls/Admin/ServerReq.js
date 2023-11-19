@@ -65,6 +65,21 @@ export const PostData = async(endpoint, body)=>{
 }
 
 
+export const EditData = async(endpoint, body)=>{
+
+   try{
+    const {data} = await axiosInstance.put(endpoint, body)
+    return data
+  }
+  catch(error)
+  {
+    return error.response.data.message
+  }
+
+}
+
+
+
 
 
 

@@ -33,9 +33,10 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import ButtonIconComponent from "../Components/ButtonIcons";
-import { GetSingleData, PostData } from "../NetworkCalls/Admin/ServerReq";
+import { EditData, GetSingleData, PostData } from "../NetworkCalls/Admin/ServerReq";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import UploadImage from "../Components/uploadimage";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -112,6 +113,14 @@ const EditCelebrity = () => {
   const [data, setData] = useState({});
   const [imgweb, setImgweb] = useState("");
   const [tempimg, setTempimg] = useState("");
+
+
+  console.log("tempimg")
+  console.log(tempimg)
+
+
+  console.log("imgweb")
+  console.log(imgweb)
 
   const [CheckboxesTags, setCheckboxesTags] = useState(boxesTags);
   const [CheckboxesCategories, setCheckboxesCategories] =
@@ -246,12 +255,17 @@ const EditCelebrity = () => {
 
     setLoader(true);
 
-    const requestBody = {
-      name: data.name,
-      description: data.description,
-      celebrityImage: tempimg,
-      videoPrice: parseInt(data.videoPrice),
-      meetAndGreetPrice: parseInt(data.meetAndGreetPrice),
+      UploadImage({ img: tempimg }).then(async (res) => {
+        setImgweb(res);
+
+
+          const requestBody = {
+
+      name: data?.name,
+      description: data?.description,
+      celebrityImage: res,
+      videoPrice: parseInt(data?.videoPrice),
+      meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
       fanDiscount: data.fanDiscount,
       tags: CheckboxesTags.filter((item) => item.Check).map(
         (item) => item.Label
@@ -259,8 +273,8 @@ const EditCelebrity = () => {
       categories: CheckboxesCategories.filter((item) => item.Check).map(
         (item) => item.Label
       ),
-      responseInDays: parseInt(data.responseInDays),
-      isFeatured: data.isFeatured === "Yes" ? true : false,
+      responseInDays: parseInt(data?.responseInDays),
+      isFeatured: data?.isFeatured,
       offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
         title: item.Label,
         price: item.price,
@@ -271,8 +285,8 @@ const EditCelebrity = () => {
       })),
     };
 
-    const response = await PostData(
-      "api/celebrity/addNewCelebrity",
+    const response = await EditData(
+      `api/celebrity/update/${params?.celebrityid}`,
       requestBody
     );
 
@@ -280,14 +294,15 @@ const EditCelebrity = () => {
       toast.success(response?.message);
 
       setLoader(false);
-
-      // Emptying Form Fields
-      setData({});
-      setTempimg("");
-      setImgweb("");
+    
     } else {
       toast.error(response?.message);
     }
+
+
+      })
+
+  
   };
 
   return (
@@ -566,7 +581,7 @@ const EditCelebrity = () => {
                   label="Enter menu category"
                   name="isFeatured"
                   required
-                  value={data.isFeatured }
+              value={data?.isFeatured ? "Yes" : "No"}
                   onChange={handleOnchange}
                 >
                   {[
@@ -577,6 +592,9 @@ const EditCelebrity = () => {
                       {item.label}
                     </MenuItem>
                   ))}
+
+
+                   
                 </Select>
               </FormControl>
             </Grid>
