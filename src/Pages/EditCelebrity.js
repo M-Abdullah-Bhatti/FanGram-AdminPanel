@@ -109,9 +109,9 @@ const EditCelebrity = () => {
   const params = useParams();
   const history = useHistory();
   const [loader, setLoader] = useState(false);
+  const [data, setData] = useState({});
   const [imgweb, setImgweb] = useState("");
   const [tempimg, setTempimg] = useState("");
-  const [data, setData] = useState({});
 
   const [CheckboxesTags, setCheckboxesTags] = useState(boxesTags);
   const [CheckboxesCategories, setCheckboxesCategories] =
@@ -119,6 +119,11 @@ const EditCelebrity = () => {
   const [CheckboxesExtras, setCheckboxesExtras] = useState(boxesExtras);
   const [CheckboxesOffers, setCheckboxesOffers] = useState(boxesOffers);
   const [Error, setError] = useState("");
+
+
+ 
+
+  
 
   const { setDragOver, onDragOver, onDragLeave, setFileDropError } = Drag();
 
@@ -236,7 +241,7 @@ const EditCelebrity = () => {
     setter(updatedCheckboxes);
   };
 
-  const handleAddNewCelebrity = async (e) => {
+  const handleEditCelebrity = async (e) => {
     e.preventDefault();
 
     setLoader(true);
@@ -346,7 +351,7 @@ const EditCelebrity = () => {
 
               {/* ======= */}
 
-              {imgweb == "" && tempimg == "" ? (
+            {imgweb == null && tempimg == null  ? (
                 <div className="addImage">
                   <div className="imagebody">
                     <img
@@ -368,23 +373,13 @@ const EditCelebrity = () => {
                       <input
                         type="file"
                         name="WebImage"
-                        accept="image/*"
+                        // accept="image/*"
                         // onChange={(e) => {
                         //   setTempimg(e.target.files[0]);
                         // }}
                         onChange={(e) => {
-                          const reader = new FileReader();
-
-                          reader.onload = () => {
-                            if (reader.readyState === 2) {
-                              setTempimg(reader.result);
-                            }
-                          };
-
-                          reader.readAsDataURL(e.target.files[0]);
-
-                          //   setTempimg(e.target.files[0]);
-                        }}
+														setTempimg(e.target.files[0]);
+													}}
                         id="upload-photo"
                         style={{ display: "none" }}
                         // required={true}
@@ -410,21 +405,14 @@ const EditCelebrity = () => {
                     >
                       <input
                         type="file"
-                        accept="image/*"
                         name="WebImage"
-                        onChange={(e) => {
-                          const reader = new FileReader();
-
-                          reader.onload = () => {
-                            if (reader.readyState === 2) {
-                              setTempimg(reader.result);
-                            }
-                          };
-
-                          reader.readAsDataURL(e.target.files[0]);
-
-                          //   setTempimg(e.target.files[0]);
-                        }}
+                       onChange={(e) => {
+														// UploadImage({img:e.target.files[0]})
+														// .then((res)=>{
+														//   setImgweb(res);
+														// })
+														setTempimg(e.target.files[0]);
+													}}
                         id="upload-photo"
                         style={{ display: "none" }}
                       />
@@ -439,20 +427,19 @@ const EditCelebrity = () => {
                           right: "-25px",
                         }}
                         onClick={() => {
-                          tempimg == "" ? setImgweb("") : setTempimg("");
+                          tempimg == "" ? setImgweb(null) : setTempimg(null);
                         }}
                       />
                       {tempimg == "" ? (
                         <img
                           alt="logo"
-                          src={DummyImage}
+                          src={imgweb || data?.celebrityImage}
                           style={{ width: "100%", height: "100%" }}
                         />
                       ) : (
                         <img
                           alt="logo"
-                          //   src={URL.createObjectURL(tempimg)}
-                          src={tempimg}
+                            src={URL.createObjectURL(tempimg)}
                           style={{ width: "100%", height: "100%" }}
                         />
                       )}
@@ -807,7 +794,7 @@ const EditCelebrity = () => {
               loader={loader}
               name="Save"
               dashboard={true}
-              onClick={handleAddNewCelebrity}
+              onClick={handleEditCelebrity}
             />
           </Grid>
         </form>
