@@ -177,68 +177,71 @@ const AddCelebrity = () => {
 
   const handleAddNewCelebrity = async (e) => {
     e.preventDefault();
+    try {
+      setLoader(true);
 
-    setLoader(true);
+      UploadImage({ img: tempimg }).then(async (res) => {
+        setImgweb(res);
 
+        const requestBody = {
+          name: data?.name,
+          description: data?.description,
+          celebrityImage: res,
+          videoPrice: parseInt(data?.videoPrice),
+          meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
+          fanDiscount: data?.fanDiscount,
 
-	 UploadImage({ img: tempimg }).then(async (res) => {
-        setImgweb(res)
+          tags: CheckboxesTags.filter((item) => item.Check).map(
+            (item) => item.Label
+          ),
 
+          categories: CheckboxesCategories.filter((item) => item.Check).map(
+            (item) => item.Label
+          ),
+          responseInDays: parseInt(data?.responseInDays),
 
-	const requestBody = {
-      name: data?.name,
-      description: data?.description,
-      celebrityImage: res,
-      videoPrice: parseInt(data?.videoPrice),
-      meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
-      fanDiscount: data?.fanDiscount,
+          isFeatured: data?.isFeatured === "Yes" ? true : false,
 
-      tags: CheckboxesTags.filter((item) => item.Check).map(
-        (item) => item.Label
-      ),
+          offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
+            title: item.Label,
+            price: item.price,
+          })),
 
-      categories: CheckboxesCategories.filter((item) => item.Check).map(
-        (item) => item.Label
-      ),
-      responseInDays: parseInt(data?.responseInDays),
+          extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
+            title: item.Label,
+            price: item.price,
+          })),
+        };
 
-      isFeatured: data?.isFeatured === "Yes" ? true : false,
+        console.log("requestBody: ", requestBody);
 
-      offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
-        title: item.Label,
-        price: item.price,
-      })),
+        const response = await PostData(
+          "api/celebrity/addNewCelebrity",
+          requestBody
+        );
 
-      extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
-        title: item.Label,
-        price: item.price,
-      })),
-    };
+        console.log("response::: ", response);
 
-    const response = await PostData(
-      "api/celebrity/addNewCelebrity",
-      requestBody
-    );
+        if (response?.status) {
+          toast.success(response?.message);
 
-  
-    if (response?.status) {
-      toast.success(response?.message);
+          setLoader(false);
 
+          // Emptying Form Fields
+          // setData({});
+          // setTempimg("");
+          // setImgweb("");
+        } else {
+          toast.error(response?.message);
+          setLoader(false);
+        }
+      });
+    } catch (error) {
+      console.log("error: ", error);
       setLoader(false);
 
-      // Emptying Form Fields
-      setData({});
-      setTempimg("");
-      setImgweb("");
-    } else {
-      toast.error(response?.message);
+      toast.error("Network Error");
     }
-
-
-
-	 })
-
-  
   };
 
   return (
