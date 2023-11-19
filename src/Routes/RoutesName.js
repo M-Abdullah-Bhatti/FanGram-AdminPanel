@@ -22,6 +22,8 @@ import OrderTracking from "../Pages/OrderTracking";
 import AddRecentVideo from "../Pages/AddRecentVideo";
 import EditRecentVideo from "../Pages/EditRecentVideo";
 import AddFAQs from "../Pages/AddFAQs";
+import AllFAQs from "../Pages/AllFAQs";
+import EditFAQ from "../Pages/EditFAQ";
 
 const Abc = () => <></>;
 
@@ -32,18 +34,18 @@ export const routes = [
     icon: <PersonIcon />,
     component: Celebrities,
   },
-  {
-    title: "Add FAQs",
-    name: "FAQs",
-    icon: <TokenIcon />,
-    component: AddFAQs,
-  },
-  // { title: "Offers", name: "Offers", icon: <LocalOfferIcon />, component: Abc },
+ 
   {
     title: "Order Requests",
     name: "orders",
     icon: <StorefrontIcon />,
     component: OrderRequests,
+  },
+   {
+    title: "All FAQs",
+    name: "All_FAQs",
+    icon: <TokenIcon />,
+    component: AllFAQs,
   },
   {
     title: "Purchase History",
@@ -83,12 +85,11 @@ export const Editroutes = [
     component: EditRecentVideo,
   },
   { name: "edit_order/:orderId", icon: <PersonIcon />, component: EditOrder },
-  // { name: "Edit_Product", icon: <TokenIcon />, component: EditProduct },
-  // { name: "Edit_Offer", icon: <LocalOfferIcon />, component: Abc },
+
   {
-    name: "Edit_Sell_Request",
+    name: "edit_faq/:id",
     icon: <StorefrontIcon />,
-    component: SingleRefund,
+    component: EditFAQ,
   },
   {
     name: "Edit_Purchase History",
@@ -111,6 +112,8 @@ export const Editroutes = [
 
 export const Addroutes = [
   { name: "Add_Celebrity", icon: <PersonIcon />, component: AddCelebrity },
+
+  { name: "add_faq", icon: <PersonIcon />, component: AddFAQs },
   {
     name: "add_recent_video/:celebrityId",
     icon: <PersonIcon />,
