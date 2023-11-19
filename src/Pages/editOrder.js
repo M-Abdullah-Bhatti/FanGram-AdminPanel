@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { Grid, Typography, Paper, Box } from "@material-ui/core";
 import ButtonComponent from "../Components/buttton";
 import { EditData } from "../NetworkCalls/Admin/ServerReq";
+import AddRecentVideo from "./AddRecentVideo";
+import DeliverOrder from "./DeliverOrder";
 
 const EditOrder = () => {
   const [data, setData] = useState(null);
@@ -197,6 +199,7 @@ const EditOrder = () => {
               )}
 
               {/* If it is approved then select the order state */}
+
               <Typography variant="h6" style={{ marginTop: 10 }}>
                 Order Next Step
               </Typography>
@@ -222,8 +225,8 @@ const EditOrder = () => {
               {data?.bookingStatus === 2 && (
                 <Grid item xs={6}>
                   <ButtonComponent
-                    name="Delivered"
-                    onClick={() => handleOrderStatus(3)}
+                    name="See Below to deliver order "
+                    // onClick={() => handleOrderStatus(3)}
                   />
                 </Grid>
               )}
@@ -231,6 +234,16 @@ const EditOrder = () => {
           </Grid>
         </Box>
       </Paper>
+
+      {/* Add Video */}
+
+      {data?.bookingStatus === 2 && (
+        <DeliverOrder
+          celebrityID={data?.celebrityID?._id}
+          billingEmail={data?.bookingEmail}
+          orderId={data?._id}
+        />
+      )}
     </Box>
   );
 };

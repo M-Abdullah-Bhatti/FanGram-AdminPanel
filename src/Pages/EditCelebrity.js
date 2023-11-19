@@ -33,7 +33,11 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import ButtonIconComponent from "../Components/ButtonIcons";
-import { EditData, GetSingleData, PostData } from "../NetworkCalls/Admin/ServerReq";
+import {
+  EditData,
+  GetSingleData,
+  PostData,
+} from "../NetworkCalls/Admin/ServerReq";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import UploadImage from "../Components/uploadimage";
@@ -115,13 +119,11 @@ const EditCelebrity = () => {
   const [imgweb, setImgweb] = useState("");
   const [tempimg, setTempimg] = useState("");
 
+  console.log("tempimg");
+  console.log(tempimg);
 
-  console.log("tempimg")
-  console.log(tempimg)
-
-
-  console.log("imgweb")
-  console.log(imgweb)
+  console.log("imgweb");
+  console.log(imgweb);
 
   const [CheckboxesTags, setCheckboxesTags] = useState(boxesTags);
   const [CheckboxesCategories, setCheckboxesCategories] =
@@ -129,11 +131,6 @@ const EditCelebrity = () => {
   const [CheckboxesExtras, setCheckboxesExtras] = useState(boxesExtras);
   const [CheckboxesOffers, setCheckboxesOffers] = useState(boxesOffers);
   const [Error, setError] = useState("");
-
-
- 
-
-  
 
   const { setDragOver, onDragOver, onDragLeave, setFileDropError } = Drag();
 
@@ -171,7 +168,6 @@ const EditCelebrity = () => {
         }))
       );
 
-     
       setCheckboxesOffers(
         boxesOffers.map((item) => {
           const responseOffer = response.offers.find(
@@ -185,8 +181,7 @@ const EditCelebrity = () => {
         })
       );
 
-
-       setCheckboxesExtras(
+      setCheckboxesExtras(
         boxesExtras.map((item) => {
           const responseExtras = response.extras.find(
             (extras) => extras.title === item.Label
@@ -199,16 +194,8 @@ const EditCelebrity = () => {
         })
       );
 
-
-
-
       // ====
     };
-
-
-    
-
-
 
     getData();
   }, []);
@@ -256,54 +243,47 @@ const EditCelebrity = () => {
 
     setLoader(true);
 
-      UploadImage({ img: tempimg }).then(async (res) => {
-        setImgweb(res);
+    UploadImage({ img: tempimg }).then(async (res) => {
+      setImgweb(res);
 
+      const requestBody = {
+        name: data?.name,
+        description: data?.description,
+        celebrityImage: res,
+        videoPrice: parseInt(data?.videoPrice),
+        meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
+        fanDiscount: data.fanDiscount,
+        tags: CheckboxesTags.filter((item) => item.Check).map(
+          (item) => item.Label
+        ),
+        categories: CheckboxesCategories.filter((item) => item.Check).map(
+          (item) => item.Label
+        ),
+        responseInDays: parseInt(data?.responseInDays),
+        isFeatured: data?.isFeatured,
+        offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
+          title: item.Label,
+          price: item.price,
+        })),
+        extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
+          title: item.Label,
+          price: item.price,
+        })),
+      };
 
-          const requestBody = {
+      const response = await EditData(
+        `api/celebrity/update/${params?.celebrityid}`,
+        requestBody
+      );
 
-      name: data?.name,
-      description: data?.description,
-      celebrityImage: res,
-      videoPrice: parseInt(data?.videoPrice),
-      meetAndGreetPrice: parseInt(data?.meetAndGreetPrice),
-      fanDiscount: data.fanDiscount,
-      tags: CheckboxesTags.filter((item) => item.Check).map(
-        (item) => item.Label
-      ),
-      categories: CheckboxesCategories.filter((item) => item.Check).map(
-        (item) => item.Label
-      ),
-      responseInDays: parseInt(data?.responseInDays),
-      isFeatured: data?.isFeatured,
-      offers: CheckboxesOffers.filter((item) => item.Check).map((item) => ({
-        title: item.Label,
-        price: item.price,
-      })),
-      extras: CheckboxesExtras.filter((item) => item.Check).map((item) => ({
-        title: item.Label,
-        price: item.price,
-      })),
-    };
+      if (response?.status) {
+        toast.success(response?.message);
 
-    const response = await EditData(
-      `api/celebrity/update/${params?.celebrityid}`,
-      requestBody
-    );
-
-    if (response?.status) {
-      toast.success(response?.message);
-
-      setLoader(false);
-    
-    } else {
-      toast.error(response?.message);
-    }
-
-
-      })
-
-  
+        setLoader(false);
+      } else {
+        toast.error(response?.message);
+      }
+    });
   };
 
   return (
@@ -367,7 +347,7 @@ const EditCelebrity = () => {
 
               {/* ======= */}
 
-            {imgweb == null && tempimg == null  ? (
+              {imgweb == null && tempimg == null ? (
                 <div className="addImage">
                   <div className="imagebody">
                     <img
@@ -394,8 +374,8 @@ const EditCelebrity = () => {
                         //   setTempimg(e.target.files[0]);
                         // }}
                         onChange={(e) => {
-														setTempimg(e.target.files[0]);
-													}}
+                          setTempimg(e.target.files[0]);
+                        }}
                         id="upload-photo"
                         style={{ display: "none" }}
                         // required={true}
@@ -422,13 +402,13 @@ const EditCelebrity = () => {
                       <input
                         type="file"
                         name="WebImage"
-                       onChange={(e) => {
-														// UploadImage({img:e.target.files[0]})
-														// .then((res)=>{
-														//   setImgweb(res);
-														// })
-														setTempimg(e.target.files[0]);
-													}}
+                        onChange={(e) => {
+                          // UploadImage({img:e.target.files[0]})
+                          // .then((res)=>{
+                          //   setImgweb(res);
+                          // })
+                          setTempimg(e.target.files[0]);
+                        }}
                         id="upload-photo"
                         style={{ display: "none" }}
                       />
@@ -455,7 +435,7 @@ const EditCelebrity = () => {
                       ) : (
                         <img
                           alt="logo"
-                            src={URL.createObjectURL(tempimg)}
+                          src={URL.createObjectURL(tempimg)}
                           style={{ width: "100%", height: "100%" }}
                         />
                       )}
@@ -582,7 +562,7 @@ const EditCelebrity = () => {
                   label="Enter menu category"
                   name="isFeatured"
                   required
-              value={data?.isFeatured ? "Yes" : "No"}
+                  value={data?.isFeatured ? "Yes" : "No"}
                   onChange={handleOnchange}
                 >
                   {[
@@ -593,16 +573,9 @@ const EditCelebrity = () => {
                       {item.label}
                     </MenuItem>
                   ))}
-
-
-                   
                 </Select>
               </FormControl>
             </Grid>
-
-         
-
-
 
             {/* Description */}
 
@@ -624,9 +597,6 @@ const EditCelebrity = () => {
               />
             </Grid>
           </Grid>
-
-
-          
 
           {/* Tags */}
 
@@ -811,12 +781,13 @@ const EditCelebrity = () => {
             <Typography style={{ color: "#E12F2F" }}>{Error}</Typography>
           </Box>
 
-
-             {/* Recent Videos */}
-<Box my={5}>
-  <Typography variant="h6" style={{marginBottom:"10px"}}>{data?.name} Recent Videos</Typography>
-           <AllVideos celebrityID={params?.celebrityid} />
-           </Box>
+          {/* Recent Videos */}
+          <Box my={5}>
+            <Typography variant="h6" style={{ marginBottom: "10px" }}>
+              {data?.name} Recent Videos
+            </Typography>
+            <AllVideos celebrityID={params?.celebrityid} />
+          </Box>
 
           <Grid
             container
