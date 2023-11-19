@@ -81,7 +81,7 @@ const LoginScreen = () => {
             }}
           >
             <h1>Welcome</h1>
-            <Typography sx={{ color: "#757575" }}>Riwa Dashboard</Typography>
+            <Typography sx={{ color: "#757575" }}>FanGram Dashboard</Typography>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="textfields_div">
