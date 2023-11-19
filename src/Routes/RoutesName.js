@@ -12,7 +12,7 @@ import AddProduct from "../Pages/AddProduct";
 import EditProduct from "../Pages/EditProduct";
 import EditCelebrity from "../Pages/EditCelebrity";
 import AddCelebrity from "../Pages/AddCelebrity";
-import PurchaseHistory from "../Pages/PurchaseHistroy";
+import PurchaseHistory from "../Pages/AllCoupons";
 import OrderRequests from "../Pages/OrderRequests";
 import SingleRefund from "../Pages/singleRefund";
 import SettingIcon from "../Assets/sidebarSettingsIcon.svg";
@@ -24,6 +24,7 @@ import EditRecentVideo from "../Pages/EditRecentVideo";
 import AddFAQs from "../Pages/AddFAQs";
 import AllFAQs from "../Pages/AllFAQs";
 import EditFAQ from "../Pages/EditFAQ";
+import AllCoupon from "../Pages/AllCoupons";
 
 const Abc = () => <></>;
 
@@ -34,24 +35,24 @@ export const routes = [
     icon: <PersonIcon />,
     component: Celebrities,
   },
- 
+
   {
     title: "Order Requests",
     name: "orders",
     icon: <StorefrontIcon />,
     component: OrderRequests,
   },
-   {
+  {
     title: "All FAQs",
     name: "All_FAQs",
     icon: <TokenIcon />,
     component: AllFAQs,
   },
   {
-    title: "Purchase History",
-    name: "Purchase History",
+    title: "Coupon",
+    name: "Coupons",
     icon: <ShoppingBasketIcon />,
-    component: PurchaseHistory,
+    component: AllCoupon,
   },
   {
     title: "Settings",

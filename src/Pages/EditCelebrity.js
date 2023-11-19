@@ -98,7 +98,6 @@ const boxesCategories = [
 const boxesOffers = [
   { Label: "Buy For", price: "", Check: false },
   { Label: "Members Only", price: "", Check: false },
-  { Label: "Full HD", price: "", Check: false },
   { Label: "Instagram Dm", price: "", Check: false },
 ];
 
