@@ -25,6 +25,32 @@ export const GetAllData=async(endpoint)=>{
 }
 
 
+export const GetSingleData=async(endpoint)=>{
+  try{
+    const {data} = await axiosInstance.get(endpoint)
+    return data?.data
+  }
+  catch(error)
+  {
+    return error.response.data.message
+  }
+}
+
+
+export const DeleteSingleData=async(endpoint)=>{
+  try{
+    const {data} = await axiosInstance.delete(endpoint)
+    return data?.data
+  }
+  catch(error)
+  {
+    return error.response.data.message
+  }
+}
+
+
+
+
 export const PostData = async(endpoint, body)=>{
 
    try{

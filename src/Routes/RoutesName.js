@@ -10,7 +10,7 @@ import Products from "../Pages/Products";
 import Celebrities from "../Pages/Celebrities";
 import AddProduct from "../Pages/AddProduct";
 import EditProduct from "../Pages/EditProduct";
-import EditUser from "../Pages/EditUser";
+import EditCelebrity from "../Pages/EditCelebrity";
 import AddCelebrity from "../Pages/AddCelebrity";
 import PurchaseHistory from "../Pages/PurchaseHistroy";
 import OrderRequests from "../Pages/OrderRequests";
@@ -69,7 +69,7 @@ export const routes = [
 ];
 
 export const Editroutes = [
-  // { name: "Edit_Admin", icon: <PersonIcon />, component: EditUser },
+  { name: "edit_celebrity/:celebrityId", icon: <PersonIcon />, component: EditCelebrity },
   // { name: "Edit_Product", icon: <TokenIcon />, component: EditProduct },
   // { name: "Edit_Offer", icon: <LocalOfferIcon />, component: Abc },
   {

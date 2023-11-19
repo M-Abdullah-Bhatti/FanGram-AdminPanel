@@ -18,11 +18,12 @@ export default function CheckboxLabels({ Label, check, onClick }) {
                             marginRight: '5px'
 
                         }}
+                        onClick={onClick}
                     />
                 }
                 label={Label}
                 name={Label}
-                onClick={onClick}
+                
             />
         </FormGroup>
     );

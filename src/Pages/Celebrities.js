@@ -9,7 +9,6 @@ import Button from "@mui/material/Button";
 
 // import { Helmet } from "react-helmet-async";
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   Box,
@@ -44,7 +43,7 @@ import {
 
 import { spacing } from "@material-ui/system";
 import DeleteUser from "../Components/modals/DeleteUser";
-import { GetAllData, getAdmins } from "../NetworkCalls/Admin/ServerReq";
+import { DeleteSingleData, GetAllData } from "../NetworkCalls/Admin/ServerReq";
 import ButtonComponent from "../Components/buttton";
 import ButtonIconComponent from "../Components/ButtonIcons";
 import SearchBar from "../Components/SearchBar";
@@ -217,13 +216,11 @@ function EnhancedTable() {
   let [data, setData] = React.useState([]);
   const [fixedData, setFixedData] = React.useState([]);
   const [Refresh, setRefresh] = React.useState(false);
-  const auth = getAuth();
-  const [currentUserId, setcurrentUserId] = useState("");
+  const [currentCelebrityId, setCurrentCelebrityId] = useState("");
+  const [currentCelebrity, setCurrentCelebrity] = useState({});
 
   useEffect(() => {
-    // onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    // getData(user.uid);
+   
     getData();
     //     }
     // });
@@ -242,6 +239,9 @@ function EnhancedTable() {
     }
   };
 
+
+ 
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -257,29 +257,7 @@ function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleCheckPermission = (arr) => {
-    return arr.includes("Admins") || arr.includes("Admin");
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -311,7 +289,6 @@ function EnhancedTable() {
 
   const [open, setOpen] = React.useState(false);
 
-  const [DeleteUid, setDeleteUid] = useState({});
   const handleOpen = () => {
     setOpen(!open);
   };
@@ -363,7 +340,7 @@ function EnhancedTable() {
                   orderBy={orderBy}
                   onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
-                  rowCount={data.length}
+                  rowCount={data?.length}
                 />
                 <TableBody>
                   {stableSort(data, getComparator(order, orderBy))
@@ -445,36 +422,33 @@ function EnhancedTable() {
                             <Box mr={2}>
                               <Link
                                 to={{
-                                  pathname: "/dashboard/edit_admin",
+                                  pathname: `/dashboard/edit_celebrity/${row?._id}`,
                                   state: row,
                                 }}
                               >
-                                <Tooltip title="Edit Admin">
+                                <Tooltip title="Edit Celebrity">
                                   <IconButton>
                                     <EditIcon />
                                   </IconButton>
                                 </Tooltip>
                               </Link>
-                              <Link
-                                to={{
-                                  //   pathname: `/dashboard/editsuggestions/${row.selfId}`,
-                                  pathname: `/dashboard/admins`,
-                                }}
+                              <span
+                                // to={{
+                                //   pathname: `/dashboard/celebrities`,
+                                // }}
                               >
-                                <Tooltip title="Delete Admin">
+                                <Tooltip title={`Delete Celebrity: ${row?.name}`}>
                                   <IconButton
                                     onClick={() => {
                                       handleOpen();
-                                      setDeleteUid({
-                                        name: row.FullName,
-                                        uid: row._id,
-                                      });
+                                      // handleDeleteCelebrity(row?._id);
+                                      setCurrentCelebrityId(row?._id)
                                     }}
                                   >
                                     <Delete style={{ color: "#E12F2F" }} />
                                   </IconButton>
                                 </Tooltip>
-                              </Link>
+                              </span>
                             </Box>
                           </TableCell>
                         </TableRow>
@@ -491,7 +465,7 @@ function EnhancedTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={data.length}
+              count={data?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
@@ -501,8 +475,7 @@ function EnhancedTable() {
 
           <DeleteUser
             open={open}
-            data={DeleteUid}
-            setData={setData}
+            currentCelebrityId={currentCelebrityId}
             handleOpen={handleOpen}
             setRefresh={setRefresh}
             handleClose={handleClose}
