@@ -15,7 +15,7 @@ const LoginScreen = () => {
   const history = useHistory();
   const [loader, setLoader] = useState(false);
   const [Error, setError] = useState("");
-  const [data, setData] = useState({  });
+  const [data, setData] = useState({});
 
   const auth = getAuth();
 
@@ -42,7 +42,7 @@ const LoginScreen = () => {
     setError("");
     setLoader(true);
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await LoginUser(data);
 
       if (response?.status) {
@@ -50,7 +50,7 @@ const LoginScreen = () => {
           userId: response?.userId,
           token: response?.token,
         };
-        setLoader(false)
+        setLoader(false);
         toast.success(response?.message);
         window.sessionStorage.setItem("info", JSON.stringify(user));
         history.push({ pathname: "/dashboard/celebrities" });
@@ -100,29 +100,6 @@ const LoginScreen = () => {
                 placeholder={"Password"}
                 onChange={handleChange}
               />
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginLeft: "10px",
-              }}
-            >
-              <Link
-                to={{
-                  pathname: "forget",
-                  // state: row,
-                }}
-                // onClick={(e) => e.preventDefault()}
-                style={{
-                  color: "#000",
-                  textDecoration: "none",
-                  fontWeight: "400",
-                }}
-              >
-                Forgot Password?
-              </Link>
             </div>
 
             <div>
