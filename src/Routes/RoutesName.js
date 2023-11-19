@@ -19,6 +19,7 @@ import SettingIcon from "../Assets/sidebarSettingsIcon.svg";
 import SettingsPage from "../Pages/SettingsPage";
 import EditOrder from "../Pages/editOrder";
 import OrderTracking from "../Pages/OrderTracking";
+import AddRecentVideo from "../Pages/AddRecentVideo";
 
 const Abc = () => <></>;
 
@@ -98,6 +99,7 @@ export const Editroutes = [
 
 export const Addroutes = [
   { name: "Add_Celebrity", icon: <PersonIcon />, component: AddCelebrity },
+  { name: "add_recent_video/:celebrityId", icon: <PersonIcon />, component: AddRecentVideo },
   { name: "Add_Nft", icon: <TokenIcon />, component: AddProduct },
   // { name: "Add_Offer", icon: <LocalOfferIcon />, component: Abc },
   { name: "Add_Sell Request", icon: <StorefrontIcon />, component: Abc },
