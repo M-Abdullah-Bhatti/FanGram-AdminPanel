@@ -27,33 +27,36 @@ import { useParams } from "react-router-dom";
 import { EditData, GetSingleData } from "../NetworkCalls/Admin/ServerReq";
 
 const Divider = styled(MuiDivider)(spacing);
-
 const EditFAQ = () => {
   const params = useParams();
   const [loader, setLoader] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({});
+  const [error, setError] = useState("");
 
- 
   useEffect(() => {
     const getData = async () => {
-      const response = await GetSingleData(`api/faq/${params?.id}`);
-      setData(response);
+      try {
+        setIsLoading(true);
+        const response = await GetSingleData(`api/faq/${params?.id}`);
+        console.log("res: ", response);
+        setData(response);
+        setIsLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setIsLoading(false);
+      }
     };
 
     getData();
-  }, []);
-
-  const [Error, setError] = useState("");
+  }, [params?.id]);
 
   const handleOnchange = (e) => {
     const { name, value } = e.target;
-    setData((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleEditFAQ = async (e) => {
@@ -61,26 +64,20 @@ const EditFAQ = () => {
     setLoader(true);
 
     try {
-      
-
-      const response = EditData(`api/faq/edit/${params?.id}`, data);
-      
-      console.log("response")
-      console.log(response)
-
+      const response = await EditData(`api/faq/edit/${params?.id}`, data);
       if (response?.status) {
         toast.success(response?.message);
-        setLoader(false);
       } else {
         toast.error(response?.message);
       }
     } catch (err) {
-      toast.error(err);
+      toast.error(err.message);
+    } finally {
+      setLoader(false);
     }
   };
-
-  return (
-    <React.Fragment>
+  return !isLoading ? (
+    <>
       <Grid
         style={{ marginBottom: "10px" }}
         justify="space-between"
@@ -137,7 +134,7 @@ const EditFAQ = () => {
                 type="text"
                 name="question"
                 InputLabelProps={{ shrink: true }}
-                value={data?.question}
+                value={data?.question || ""}
                 onChange={handleOnchange}
                 fullWidth={true}
               />
@@ -150,7 +147,7 @@ const EditFAQ = () => {
                 minRows={8}
                 name="answer"
                 required
-                value={data?.answer}
+                value={data?.answer || ""}
                 onChange={handleOnchange}
                 placeholder="Answer"
                 style={{
@@ -182,7 +179,9 @@ const EditFAQ = () => {
           </Grid>
         </form>
       </div>
-    </React.Fragment>
+    </>
+  ) : (
+    <Typography>Loading...</Typography>
   );
 };
 
