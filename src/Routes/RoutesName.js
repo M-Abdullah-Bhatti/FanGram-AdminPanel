@@ -25,6 +25,7 @@ import AddFAQs from "../Pages/AddFAQs";
 import AllFAQs from "../Pages/AllFAQs";
 import EditFAQ from "../Pages/EditFAQ";
 import AllCoupon from "../Pages/AllCoupons";
+import AddCoupon from "../Pages/AddCoupon";
 
 const Abc = () => <></>;
 
@@ -115,6 +116,9 @@ export const Addroutes = [
   { name: "Add_Celebrity", icon: <PersonIcon />, component: AddCelebrity },
 
   { name: "add_faq", icon: <PersonIcon />, component: AddFAQs },
+
+  { name: "add_Coupon", icon: <PersonIcon />, component: AddCoupon },
+
   {
     name: "add_recent_video/:celebrityId",
     icon: <PersonIcon />,

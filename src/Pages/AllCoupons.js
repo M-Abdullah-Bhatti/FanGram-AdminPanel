@@ -376,7 +376,7 @@ const AllCoupon = () => {
             loader={false}
             imageBool={true}
             name="Create New Coupon"
-            onClick={() => history.push("/dashboard/add_faq")}
+            onClick={() => history.push("/dashboard/add_Coupon")}
           />
         </Grid>
       </Grid>
