@@ -69,7 +69,13 @@ export const routes = [
 ];
 
 export const Editroutes = [
-  { name: "edit_celebrity/:celebrityId", icon: <PersonIcon />, component: EditCelebrity },
+  {
+    name: "edit_celebrity/:celebrityId",
+    icon: <PersonIcon />,
+    component: EditCelebrity,
+  },
+  { name: "edit_order/:orderId", icon: <PersonIcon />, component: EditOrder },
+
   // { name: "Edit_Product", icon: <TokenIcon />, component: EditProduct },
   // { name: "Edit_Offer", icon: <LocalOfferIcon />, component: Abc },
   {

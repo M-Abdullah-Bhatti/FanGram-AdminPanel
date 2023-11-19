@@ -1,449 +1,238 @@
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@material-ui/core";
-import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import { axiosInstance } from "../axios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import EtagModal from "../Components/modals/E-tag";
-import { useState } from "react";
 import { toast } from "react-toastify";
-
-const ProductInfo = ({ state }) => {
-  return (
-    <>
-      <Grid item xs={6} className="refundcontainer refundcontainer1">
-        <Typography>NFT Name</Typography>
-        <Typography>Artist</Typography>
-        <Typography>Material</Typography>
-        <Typography>Size</Typography>
-      </Grid>
-      <Grid item xs={6} className="refundcontainer refundcontainer2">
-        <Typography style={{ fontWeight: "bold" }}>{state?.Name}</Typography>
-        <Typography style={{ fontWeight: "bold" }}>{state?.Artist}</Typography>
-        <Typography style={{ fontWeight: "bold" }}>
-          {state?.Material}
-        </Typography>
-        <Typography style={{ fontWeight: "bold" }}>{state?.Size}</Typography>
-      </Grid>
-
-      {/* </Box> */}
-    </>
-  );
-};
-
-const OrderInfo = ({ data }) => {
-  return (
-    <>
-      <Grid
-        style={{ flexDirection: "column" }}
-        container
-        xs={6}
-        spacing={24}
-        className="refundcontainer refundcontainer1"
-      >
-        <Typography variant="h5">Shipping Details</Typography>
-
-        <Grid xs={12} container style={{ marginTop: "40px" }}>
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              First Name
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingFirstName}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Last Name
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingLastName}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Residential Address
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingAddress}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Country
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingCountry}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              City
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingCity}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Email
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingEmail}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Contact No.
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.ShippingContact}
-              </Typography>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid
-        style={{ flexDirection: "column" }}
-        container
-        xs={6}
-        spacing={24}
-        className="refundcontainer refundcontainer1"
-      >
-        <Typography variant="h5">Billing Details</Typography>
-
-        <Grid xs={12} container style={{ marginTop: "40px" }}>
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              First Name
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingFirstName}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Last Name
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingLastName}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Residential Address
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingAddress}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Country
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingCountry}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={6}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              City
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingCity}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Email
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingEmail}
-              </Typography>
-            </Typography>
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            className="refundcontainer2"
-            style={{ marginBottom: "1.5rem" }}
-          >
-            <Typography variant="h6">
-              Contact No.
-              <br />
-              <Typography
-                variant="p"
-                style={{ fontWeight: 300, fontSize: "15px" }}
-              >
-                {data.BillingContact}
-              </Typography>
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    </>
-  );
-};
+import { Grid, Typography, Paper, Box } from "@material-ui/core";
+import ButtonComponent from "../Components/buttton";
+import { EditData } from "../NetworkCalls/Admin/ServerReq";
 
 const EditOrder = () => {
-  const { state } = useLocation();
-  const history = useHistory();
-  const [data, setData] = React.useState({});
-  const [open, setOpen] = useState(false);
-  const closeSuccess = () => {
-    setOpen(false);
-  };
-  let params = useParams();
+  const [data, setData] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const params = useParams();
 
-  const resolvedHandler = async () => {
-    try {
-      const response = await axiosInstance.put(
-        `admin/setOrderCompleted?orderId=${params.orderid}`,
-        { EtagId: data }
-      );
-      if (response) {
-        history.push({ pathname: "/dashboard/purchase%20history" });
-        // handleClose()
-      }
-    } catch (error) {
-      toast.error(error?.message);
-      console.log(error, "error");
-    }
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     getOrderDetails();
   }, []);
 
   const getOrderDetails = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get(
-        `admin/getSingleOrder?orderId=${params.orderid}`,
-        {}
+        `api/order/orderDetails?orderId=${params.orderid}`
       );
-      setData(response.data);
-      console.log(response?.data?.EtagId);
-      // history.push({ pathname: "/dashboard/Refund Requests" })
+      setData(response.data.data);
+      console.log("response: ", response.data.data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+      toast.error(error?.message);
       console.log(error);
     }
   };
 
-  return (
-    Object.keys(data).length != 0 && (
-      <React.Fragment>
-        {/* <Helmet title="Orders" /> */}
-        <Grid justify="space-between" container spacing={24}>
-          <Grid item>
-            <Typography variant="h4" gutterBottom display="inline">
-              Order Details
-            </Typography>
-          </Grid>
-          {data.OrderCompleted == false && (
-            <Grid item>
-              <Button
-                variant="outlined"
-                // bor
-                style={{
-                  textTransform: "capitalize",
-                  borderRadius: "15px",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  padding: "4px 20px",
-                  borderRadius: "30px",
-                  backgroundColor: "#fff",
-                  color: "#000",
-                  border: "2px solid #000",
-                  display: state?.Resolved ? "none" : "block",
-                }}
-                onClick={resolvedHandler}
-              >
-                Mark As Completed
-              </Button>
-            </Grid>
-          )}
-        </Grid>
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
-        <Container
-          //   maxWidth="md"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          {data?.Products.map((item, index) => {
-            return (
-              <Grid
-                container
-                spacing={12}
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#fff",
-                  borderRadius: "15px",
-                  marginTop: "50px",
-                  border: "1px solid #EAEAEA",
-                  flexDirection: "row",
-                }}
-              >
-                <ProductInfo state={item} />
+  if (!data) {
+    return <Typography>No order details available.</Typography>;
+  }
+
+  const handleApproveOrDisApprove = async (decision) => {
+    console.log("decision: ", decision, params.orderid);
+
+    const requestBody = {
+      orderId: params?.orderid,
+      decision: decision,
+    };
+
+    try {
+      const response = await EditData(`api/order/orderApproval`, requestBody);
+
+      if (response?.status) {
+        toast.success(response?.message);
+        // Call getOrderDetails again to refresh the data
+        getOrderDetails();
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the order.");
+      console.error(error);
+    }
+  };
+
+  const handleOrderStatus = async (status) => {
+    console.log("decision: ", status, params.orderid);
+
+    const requestBody = {
+      orderId: params?.orderid,
+      orderStatus: status,
+    };
+
+    try {
+      const response = await EditData(`api/order/orderStatus`, requestBody);
+
+      if (response?.status) {
+        toast.success(response?.message);
+        // Call getOrderDetails again to refresh the data
+        getOrderDetails();
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the order.");
+      console.error(error);
+    }
+  };
+
+  return (
+    <Box padding={3}>
+      <Paper elevation={3}>
+        <Box padding={3}>
+          <Typography variant="h4" gutterBottom>
+            Order Details
+          </Typography>
+          {/* <Divider /> */}
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Booking Information</Typography>
+
+              <Box paddingBottom={2} paddingTop={2}>
+                <Typography>
+                  <b>From:</b> {data.bookingBy.name} <b>Gender:</b> (
+                  {data.bookingBy.gender})
+                </Typography>
+              </Box>
+
+              {data.bookingTo && (
+                <Box paddingBottom={2}>
+                  <Typography>
+                    <b>To:</b> {data.bookingTo.name} <b>Gender:</b> (
+                    {data.bookingTo.gender})
+                  </Typography>
+                </Box>
+              )}
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Occasion:</b> {data.occasion}
+                </Typography>
+              </Box>
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Message:</b> {data.customMessage}
+                </Typography>
+              </Box>
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Language:</b> {data.language}
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Typography variant="h6">Payment and Delivery</Typography>
+
+              <Box paddingBottom={2} paddingTop={2}>
+                <Typography>
+                  <b>Price:</b> {data.price}
+                </Typography>
+              </Box>
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Fast Delivery:</b> {data.fastDelivery ? "Yes" : "No"}
+                </Typography>
+              </Box>
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Billing Number:</b> {data.billingNumber}
+                </Typography>
+              </Box>
+
+              <Box paddingBottom={2}>
+                <Typography>
+                  <b>Email:</b> {data.bookingEmail}
+                </Typography>
+              </Box>
+            </Grid>
+
+            {data.image && (
+              <Grid item xs={6}>
+                <Typography variant="h6">Order Image</Typography>
+                <img
+                  src={data.image.url}
+                  alt="Order"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
               </Grid>
-            );
-          })}
-          <Grid
-            container
-            spacing={1}
-            style={{
-              justifyContent: "center",
-              alignItems: "flex-start",
-              backgroundColor: "#fff",
-              borderRadius: "15px",
-              marginTop: "50px",
-              border: "1px solid #EAEAEA",
-              flexDirection: "row",
-            }}
-          >
-            <OrderInfo data={data} />
+            )}
+
+            <Grid item xs={6}>
+              <Typography variant="h6">Edit Order Details</Typography>
+              {/* If it is not approved */}
+              {data?.userAwarded == false && (
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <ButtonComponent
+                      name="Approve Order"
+                      // Additional props
+                      onClick={() => handleApproveOrDisApprove("approve")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <ButtonComponent
+                      name="Disapprove Order"
+                      // Additional props
+                      onClick={() => handleApproveOrDisApprove("discard")}
+                    />
+                  </Grid>
+                </Grid>
+              )}
+
+              {/* If it is approved then select the order state */}
+              <Typography variant="h6" style={{ marginTop: 10 }}>
+                Order Next Step
+              </Typography>
+
+              {data?.bookingStatus === 0 && (
+                <Grid item xs={6}>
+                  <ButtonComponent
+                    name="Send to Celebrity"
+                    onClick={() => handleOrderStatus(1)}
+                  />
+                </Grid>
+              )}
+
+              {data?.bookingStatus === 1 && (
+                <Grid item xs={6}>
+                  <ButtonComponent
+                    name="Celebrity Accepted"
+                    onClick={() => handleOrderStatus(2)}
+                  />
+                </Grid>
+              )}
+
+              {data?.bookingStatus === 2 && (
+                <Grid item xs={6}>
+                  <ButtonComponent
+                    name="Delivered"
+                    onClick={() => handleOrderStatus(3)}
+                  />
+                </Grid>
+              )}
+            </Grid>
           </Grid>
-        </Container>
-        <EtagModal handleClose={closeSuccess} open={open} />
-      </React.Fragment>
-    )
+        </Box>
+      </Paper>
+    </Box>
   );
 };
+
 export default EditOrder;

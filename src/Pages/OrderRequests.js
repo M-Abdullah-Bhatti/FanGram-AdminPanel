@@ -115,6 +115,7 @@ const headCells = [
   { id: "Order Price", alignment: "left", label: "Order Price" },
 
   { id: "Order Placed", alignment: "left", label: "Order Placed" },
+
   { id: "actions", alignment: "right", label: "Actions" },
 ];
 
@@ -418,7 +419,7 @@ function EnhancedTable() {
                             <Box mr={2}>
                               <Link
                                 to={{
-                                  pathname: "/dashboard/edit_admin",
+                                  pathname: `/dashboard/edit_order/${row?._id}`,
                                   state: row,
                                 }}
                               >
